@@ -8,8 +8,7 @@ import Profile from './components/Profile.vue'
 <template>
 
   <main>
-    <Profile />
-
+    <router-view></router-view>
   </main>
 </template>
 

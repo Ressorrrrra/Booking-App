@@ -18,7 +18,7 @@
             <input v-model="password" placeholder="" class="rounded-input" />
         </div>
 
-        <button class="button">
+        <button class="button" @click="goToProfile">
             <div class="label-text-wrapper">
                 <div class="label-text-2">Войти</div>
             </div>
@@ -33,7 +33,12 @@
 
 <script>
 export default {
-    name: "Frame"
+    name: "Frame",
+    methods: {
+        goToProfile() {
+            this.$router.push({ name: 'profile' });
+        }
+    },
 };
 </script>
 
