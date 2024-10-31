@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "9iDgQV3KoV+pBTHlLhxWv2XonCLsvh8DGBBN5gzle0g=",
+  "Source": "BookingApp.Server",
+  "BasePath": "_content/BookingApp.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\jbob0\\source\\repos\\Booking-App\\bookingapp.client\\bookingapp.client.esproj",
+      "Version": 2,
+      "Source": "bookingapp.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

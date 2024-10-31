@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "NlqsUBZv7B9iqMwFmt9AvbaRBxyAIWS1HXBB+e1ctrAmuxorrZegUDJgmHUTNnaFH94ylirdppWhL5uy96tYRw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jbob0\\source\\repos\\Booking-App\\BookingApp.Server\\BookingApp.Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jbob0\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\8.0.10\\microsoft.aspnetcore.spaproxy.8.0.10.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\jbob0\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}
