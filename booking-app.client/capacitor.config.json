@@ -1,0 +1,5 @@
+{
+  "appId": "booking.app.client",
+  "appName": "booking-app.client",
+  "webDir": "dist"
+}
