@@ -39,7 +39,7 @@
 
 
         </ScrollPanel>
-        <Navbar class="navbar"></Navbar>
+        <Navbar></Navbar>
     </div>
 
 
@@ -60,12 +60,6 @@ import ScrollPanel from 'primevue/scrollpanel';
     justify-content: center;
     align-items: center;
     margin: 20px;
-}
-
-.navbar {
-    bottom: 0;
-    justify-content: center;
-    align-items: center;
 }
 
 .profileInfo .userData {

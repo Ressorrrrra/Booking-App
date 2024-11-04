@@ -1,5 +1,5 @@
 <template>
-    <Toolbar>
+    <Toolbar class="navbar">
         <template #start>
             <Button label="Поиск" @click="goToSearch"></Button>
         </template>
@@ -33,3 +33,11 @@ function goToProfile() {
     router.push({ name: 'profile' });
 }
 </script>
+
+<style>
+.navbar {
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+</style>
