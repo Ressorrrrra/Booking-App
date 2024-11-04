@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "./components/Login.vue";
-import Profile from "./components/Profile.vue";
+import LoginComponent from "./components/LoginComponent.vue";
+import ProfileComponent from "./components/ProfileComponent.vue";
 
 const routes = [
-  { path: "/", component: Login, name: "login" },
-  { path: "/profile", component: Profile, name: "profile" },
+  { path: "/", component: LoginComponent, name: "login" },
+  { path: "/profile", component: ProfileComponent, name: "profile" },
   { path: "/:pathMatch(.*)*", redirect: "/" }
 ];
 
