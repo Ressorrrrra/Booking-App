@@ -18,7 +18,8 @@
                     <p>Axel Hotel & Hostel</p>
                     <p>19.10.2024 - 23.10.2024</p>
                     <p>Статус: ожидает оплаты</p>
-                    <Button type="bookingInfo" severity="secondary" label="Информация о заказе">
+                    <Button type="bookingInfo" severity="secondary" label="Информация о заказе"
+                        @click="goToBookingInfo">
 
                     </Button>
                 </div>
@@ -51,6 +52,13 @@ import { Image } from 'primevue';
 import Button from 'primevue/button';
 import Navbar from './NavbarComponent.vue';
 import ScrollPanel from 'primevue/scrollpanel';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function goToBookingInfo() {
+    router.push({ name: 'bookinginfo' })
+}
 </script>
 
 <style>

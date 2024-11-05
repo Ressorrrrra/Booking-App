@@ -4,8 +4,9 @@
             <InputText name="username" type="text" placeholder="Username" fluid />
             <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
                 $form.username.error?.message }}</Message>
-            <Password name="password1" :feedback="false" />
+            <Password name="password" :feedback="false" />
             <Button type="submit" severity="secondary" label="Submit" />
+            <p> Нет аккаунта? <span @click="goToRegistration">Зарегистрироваться</span></p>
         </div>
 
     </Form>
@@ -33,8 +34,11 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function onFormSubmit(values) {
-    console.log('Form submitted with:', values);
     router.push({ name: 'profile' });
+}
+
+function goToRegistration() {
+    router.push({ name: 'registration' });
 }
 </script>
 

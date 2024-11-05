@@ -4,13 +4,31 @@ import ProfileComponent from "./components/ProfileComponent.vue";
 import SearchComponent from "./components/SearchComponent.vue";
 import MainPageComponent from "./components/MainPageComponent.vue";
 import HotelInfoComponent from "./components/HotelInfoComponent.vue";
+import BookingPageComponent from "./components/BookingPageComponent.vue";
+import BookingInfoComponent from "./components/BookingInfoComponent.vue";
+import RegistrationComponent from "./components/RegistrationComponent.vue";
 
 const routes = [
   { path: "/", component: LoginComponent, name: "login" },
+  {
+    path: "/registration",
+    component: RegistrationComponent,
+    name: "registration"
+  },
   { path: "/profile", component: ProfileComponent, name: "profile" },
   { path: "/search", component: SearchComponent, name: "search" },
   { path: "/mainpage", component: MainPageComponent, name: "mainpage" },
   { path: "/hotelinfo", component: HotelInfoComponent, name: "hotelinfo" },
+  {
+    path: "/bookinginfo",
+    component: BookingInfoComponent,
+    name: "bookinginfo"
+  },
+  {
+    path: "/bookingpage",
+    component: BookingPageComponent,
+    name: "bookingpage"
+  },
   { path: "/:pathMatch(.*)*", redirect: "/" }
 ];
 

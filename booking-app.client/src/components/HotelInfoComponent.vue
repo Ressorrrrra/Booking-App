@@ -5,7 +5,7 @@
             <div class="info">
                 <p>The Langham Gold Coast</p>
                 <p>Австралия, Голд-Кост </p>
-                <Button label="Забронировать номер" aut></Button>
+                <Button label="Забронировать номер" @click="goToBookingPage"></Button>
             </div>
         </div>
 
@@ -43,6 +43,13 @@ import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+
+function goToBookingPage() {
+    router.push({ name: 'bookingpage' })
+}
 
 
 </script>
