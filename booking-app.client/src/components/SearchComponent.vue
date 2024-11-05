@@ -3,6 +3,7 @@
         <div class="div">
             <IconField>
                 <InputText name="hotelname" type="text" placeholder="Поиск" fluid icon />
+                <InputIcon class="pi pi-search" />
             </IconField>
             <div class="optionsDiv">
                 <p>Время проживания</p>
@@ -51,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <Button type="submit" severity="secondary" label="Submit" />
+
         </div>
 
     </Form>
@@ -75,7 +76,6 @@ import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
 import IconField from 'primevue/iconfield';
-import Button from 'primevue/button';
 import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
 import { useRouter } from 'vue-router';

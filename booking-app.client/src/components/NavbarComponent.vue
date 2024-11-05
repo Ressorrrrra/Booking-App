@@ -22,7 +22,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function goToMainPage() {
-    router.push({ name: 'login' });
+    router.push({ name: 'mainpage' });
 }
 
 function goToSearch() {
