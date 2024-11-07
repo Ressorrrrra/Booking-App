@@ -1,7 +1,7 @@
 <template>
     <div class="profilePage">
         <div class="profileInfo">
-            <Image src="./icons/profilePic.jpg" style="margin: 10px;" />
+            <Image src="https://wallpapers.com/images/hd/placeholder-profile-icon-20tehfawxt5eihco.jpg" width="128" />
             <div class="userData">
                 <p>Александр Маслаев</p>
                 <p>Эл. почта: maslayev@mail.ru</p>
@@ -12,7 +12,9 @@
         <p>Ваши бронирования:</p>
         <ScrollPanel class="bookingHistory">
             <div class="item">
-                <Image src="./icons/profilePic.jpg" style="margin: 10px;" />
+                <Image
+                    src="https://lh3.googleusercontent.com/p/AF1QipO2-6qABWRwxzyj7WtM_s2aFmRYtZodpw5DVBiC=s1360-w1360-h1020"
+                    width="190" />
 
                 <div class="info">
                     <p>Axel Hotel & Hostel</p>
@@ -26,7 +28,9 @@
             </div>
 
             <div class="item">
-                <Image src="./icons/profilePic.jpg" style="margin: 10px;" />
+                <Image
+                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/c1/34/9d/valo-hotel-city.jpg?w=700&h=-1&s=1"
+                    width="190" />
 
                 <div class="info">
                     <p>Valo</p>

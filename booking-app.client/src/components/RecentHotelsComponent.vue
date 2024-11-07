@@ -4,7 +4,9 @@
         <div class="recentHotels">
             <div class="item">
                 <p>Axel Hotel & Hostel</p>
-                <Avatar image="/icons/profilePic.jpg" shape="circle"></Avatar>
+                <Avatar
+                    image="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT2plxFL7HlgsNeuH-QPBuIfTZz2S65T0pM0VESfASZ77DoVIiK"
+                    shape="circle" size="xlarge"></Avatar>
             </div>
         </div>
     </div>

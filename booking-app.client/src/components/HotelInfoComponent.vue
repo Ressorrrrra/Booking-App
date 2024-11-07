@@ -1,7 +1,9 @@
 <template>
     <div class="hotelInfo">
         <div class="mainInfo">
-            <Image src="./icons/profilePic.jpg" preview />
+            <Image
+                src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                preview width="256" />
             <div class="info">
                 <p>The Langham Gold Coast</p>
                 <p>Австралия, Голд-Кост </p>
@@ -26,12 +28,24 @@
         <div class="pictures">
             <p class="header">Фотографии</p>
             <div class="content">
-                <Image src="/hotelInside.jpg" preview></Image>
-                <Image src="/hotelInside.jpg" preview></Image>
-                <Image src="/hotelInside.jpg" preview></Image>
-                <Image src="/hotelInside.jpg" preview></Image>
-                <Image src="/hotelInside.jpg" preview></Image>
-                <Image src="/hotelInside.jpg" preview></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
+                <Image
+                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                    preview width="150"></Image>
             </div>
         </div>
         <Navbar></Navbar>
@@ -63,6 +77,8 @@ function goToBookingPage() {
 .hotelInfo .mainInfo {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .hotelInfo .mainInfo .info {
@@ -120,7 +136,8 @@ function goToBookingPage() {
 .hotelInfo .pictures .content {
     display: grid;
     grid-column-gap: 10px;
-    grid-template-columns: repeat(2, 200px);
+    grid-row-gap: 10px;
+    grid-template-columns: repeat(2, 150px);
     align-items: center;
     justify-content: center;
     margin: 10px;

@@ -1,7 +1,9 @@
 <template>
     <div class="bookingInfo">
         <div class="hotelInfo">
-            <Image src="./icons/profilePic.jpg" preview />
+            <Image
+                src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
+                preview width="256" />
             <div class="info">
                 <p>Axel Hotel & Hostel</p>
                 <p>Австралия, Голд-Кост </p>
