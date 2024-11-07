@@ -54,20 +54,32 @@ function goToRegistration() {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    padding: 20px;
+    min-height: 100vh;
 }
 
 .headerForm {
-    font-size: large;
+    font-size: 1.5rem;
     font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .form .div {
     display: grid;
-    grid-auto-flow: row;
-    grid-row-gap: 10px;
-    align-items: center;
-    justify-content: center;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    width: 100%;
+}
 
+@media (min-width: 600px) {
+    .form .div {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 768px) {
+    .headerForm {
+        font-size: 2rem;
+    }
 }
 </style>

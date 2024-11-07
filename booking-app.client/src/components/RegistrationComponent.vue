@@ -71,13 +71,71 @@ function onFormSubmit(values) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 10px;
+    /* Добавляем отступы для лучшего восприятия */
+}
 
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 600px) {
+    .form {
+        padding: 5px;
+        /* Уменьшаем отступы на мобильных устройствах */
+    }
+
+    .form .header {
+        font-size: 18px;
+        /* Уменьшаем размер шрифта для мобильных устройств */
+        text-align: center;
+        /* Выравниваем заголовок по центру */
+    }
+
+    .form .div {
+        margin: 5px;
+        /* Уменьшаем отступы на мобильных */
+    }
+
+    .form .div .field {
+        grid-template-columns: 1fr;
+        /* Элементы в поле формы будут расположены по одному столбцу */
+    }
+}
+
+/* Медиазапрос для планшетов и экранов от 600px */
+@media (min-width: 600px) {
+    .form .header {
+        font-size: 24px;
+        /* Стандартный размер шрифта для планшетов */
+    }
+
+    .form .div .field {
+        grid-template-columns: 1fr 1fr;
+        /* На устройствах больше 600px элементы будут располагаться по два в ряд */
+    }
+}
+
+/* Медиазапрос для экрана от 1024px */
+@media (min-width: 1024px) {
+    .form .header {
+        font-size: 28px;
+        /* Увеличиваем размер шрифта на десктопах */
+    }
+
+    .form .div {
+        margin: 20px;
+        /* Увеличиваем отступы на десктопах */
+    }
+
+    .form .div .field {
+        grid-template-columns: 1fr 1fr 1fr;
+        /* Для десктопов расположение в три столбца */
+    }
 }
 
 .form .header {
-    font-size: 24;
+    font-size: 24px;
     font-weight: 600;
-
+    margin-bottom: 20px;
+    /* Добавляем отступ снизу для отделения заголовка от содержимого */
 }
 
 .form .div {

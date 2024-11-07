@@ -39,5 +39,7 @@ function goToProfile() {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    position: fixed;
+    bottom: 0;
 }
 </style>

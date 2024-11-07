@@ -52,44 +52,119 @@ function goToHotelInfo() {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    height: 200px
+    height: auto;
+    /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
+    padding: 10px;
 }
 
 .hotelList .item {
     margin: 10px;
     display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 10px;
-    justify-content: center;
+    grid-auto-flow: row;
+    /* Переводим в ряд для мобильных устройств */
+    grid-gap: 10px;
+    justify-items: center;
     align-items: center;
+    width: 100%;
+    /* Делает каждый элемент растягивающимся по ширине */
 }
 
 .hotelList .item .image {
-    margin: 100px;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    /* Сделаем изображения адаптивными */
+    max-width: 300px;
+    /* Ограничим максимальную ширину */
+    margin: 0 auto;
+    display: block;
 }
 
 .bookingHistory .item .info {
     margin: 10px;
-    margin-left: 50px;
+    margin-left: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .bookingHistory .item .info .hotelName {
-    font-size: 20px;
+    font-size: 1.2rem;
+    /* Используем относительные единицы для адаптивности */
     font-weight: 600;
 }
 
 .bookingHistory .item .info .price {
-    font-size: 16px;
+    font-size: 1rem;
+    /* Также используем относительные единицы */
     font-weight: 500;
 }
 
 .bookingHistory .item .info .location {
-    font-size: 12px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* Медиазапросы для мобильных устройств */
+@media (max-width: 600px) {
+    .hotelList .item {
+        grid-template-columns: 1fr;
+        /* Строки, а не колонки на маленьких экранах */
+    }
+
+    .hotelList .item .image {
+        max-width: 100%;
+        /* На мобильных устройствах изображение будет растягиваться */
+        margin: 0;
+    }
+
+    .bookingHistory .item .info {
+        align-items: flex-start;
+        margin-left: 0;
+        /* Убираем отступ слева на маленьких экранах */
+    }
+}
+
+/* Медиазапросы для планшетов и экранов больше 600px */
+@media (min-width: 600px) {
+    .hotelList .item {
+        grid-template-columns: 1fr 1fr;
+        /* Два элемента в строке на экранах больше 600px */
+    }
+
+    .hotelList .item .image {
+        max-width: 50%;
+        /* Ограничиваем максимальную ширину изображения */
+    }
+}
+
+/* Для экранов шириной больше 1024px */
+@media (min-width: 1024px) {
+    .hotelList .item {
+        grid-template-columns: 1fr 1fr 1fr;
+        /* Три элемента в строке */
+    }
+
+    .hotelList .item .image {
+        max-width: 100%;
+        /* Изображения для больших экранов */
+    }
+
+    .bookingHistory .item .info {
+        margin-left: 20px;
+        /* Добавляем отступы для большего экрана */
+    }
+
+    .bookingHistory .item .info .hotelName {
+        font-size: 1.5rem;
+        /* Увеличиваем размер шрифта для названия отеля */
+    }
+
+    .bookingHistory .item .info .price {
+        font-size: 1.2rem;
+    }
+
+    .bookingHistory .item .info .location {
+        font-size: 1rem;
+    }
 }
 </style>

@@ -69,33 +69,38 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 .bookingInfo {
     display: flex;
     flex-direction: column;
+    padding: 10px;
 }
 
 .bookingInfo .hotelInfo {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 
 .bookingInfo .hotelInfo .info {
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    margin-left: 0;
+    margin-top: 10px;
 }
 
 .bookingInfo .hotelInfo .name {
-    font-size: 24px;
+    font-size: 1.5rem;
+    /* Используем относительный размер */
     font-weight: 600;
 }
 
 .bookingInfo .hotelInfo .location {
-    font-size: 12px;
+    font-size: 1rem;
+    color: #777;
 }
-
 
 .bookingInfo .dates {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    margin-top: 20px;
 }
 
 .bookingInfo .dates .item {
@@ -105,25 +110,26 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
 .bookingInfo .dates .item .header {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .bookingInfo .residents {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
 }
 
-
-
 .bookingInfo .residents .header {
-    font-size: 16px;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
 .bookingInfo .residents .content {
     display: flex;
     flex-direction: row;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .bookingInfo .residents .content .item {
@@ -133,19 +139,18 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
 .bookingInfo .residents .content .item .header {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .bookingInfo .aviableRooms {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
 }
 
-
-
 .bookingInfo .aviableRooms .header {
-    font-size: 16px;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
@@ -154,15 +159,61 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .bookingInfo .aviableRooms .content .button {
-    width: 128;
-    height: 128;
+    width: 128px;
+    height: 128px;
     margin: 10px;
 }
 
 .bookingInfo .price {
-    font-size: 20px;
+    font-size: 1.5rem;
+    /* Используем относительный размер */
+    margin-top: 20px;
+}
+
+/* Медиазапросы для экранов шириной больше 600px */
+@media (min-width: 600px) {
+    .bookingInfo .hotelInfo {
+        flex-direction: row;
+    }
+
+    .bookingInfo .hotelInfo .info {
+        margin-left: 10px;
+    }
+
+    .bookingInfo .dates {
+        flex-direction: row;
+    }
+
+    .bookingInfo .dates .item {
+        margin: 10px;
+    }
+
+    .bookingInfo .residents .content {
+        flex-direction: row;
+    }
+
+    .bookingInfo .aviableRooms .content {
+        flex-direction: row;
+    }
+}
+
+/* Для экранов больше 1024px */
+@media (min-width: 1024px) {
+    .bookingInfo .hotelInfo .name {
+        font-size: 2rem;
+    }
+
+    .bookingInfo .hotelInfo .location {
+        font-size: 1.2rem;
+    }
+
+    .bookingInfo .price {
+        font-size: 2rem;
+    }
 }
 </style>

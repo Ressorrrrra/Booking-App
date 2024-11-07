@@ -74,12 +74,48 @@ function goToBookingInfo() {
     margin: 20px;
 }
 
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .profileInfo {
+        flex-direction: column;
+        /* На мобильных устройствах элементы будут вертикально */
+        margin: 15px;
+        /* Уменьшаем отступы */
+    }
+}
+
+/* Стиль для планшетов и экранов больше 600px */
+@media (min-width: 600px) {
+    .profileInfo {
+        flex-direction: row;
+        /* Для планшетов возвращаем горизонтальное расположение */
+        margin: 20px;
+        /* Стандартные отступы */
+    }
+}
+
+/* Стиль для десктопов */
+@media (min-width: 1024px) {
+    .profileInfo {
+        margin: 30px;
+        /* Увеличиваем отступы для больших экранов */
+    }
+}
+
 .profileInfo .userData {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 10px;
+}
+
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .profileInfo .userData {
+        margin: 5px;
+        /* Уменьшаем отступы на мобильных устройствах */
+    }
 }
 
 .profilePage {
@@ -89,13 +125,44 @@ function goToBookingInfo() {
     align-items: center;
 }
 
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .profilePage {
+        padding: 10px;
+        /* Уменьшаем отступы на мобильных устройствах */
+    }
+}
+
+/* Стиль для экрана шириной больше 600px */
+@media (min-width: 600px) {
+    .profilePage {
+        padding: 20px;
+        /* Увеличиваем отступы для планшетов и больших экранов */
+    }
+}
+
 .bookingHistory {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 200px
+}
+
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .bookingHistory {
+        height: auto;
+        /* Для мобильных устройств делаем высоту авто */
+    }
+}
+
+/* Стиль для планшетов и больших экранов */
+@media (min-width: 600px) {
+    .bookingHistory {
+        height: 200px;
+        /* Для планшетов и десктопов устанавливаем фиксированную высоту */
+    }
 }
 
 .bookingHistory .item {
@@ -106,11 +173,27 @@ function goToBookingInfo() {
     align-items: center;
 }
 
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .bookingHistory .item {
+        flex-direction: column;
+        /* На мобильных устройствах элементы будут вертикально */
+    }
+}
+
 .bookingHistory .item .info {
     margin: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+/* Стиль для мобильных устройств */
+@media (max-width: 600px) {
+    .bookingHistory .item .info {
+        margin: 5px;
+        /* Уменьшаем отступы для мобильных устройств */
+    }
 }
 </style>

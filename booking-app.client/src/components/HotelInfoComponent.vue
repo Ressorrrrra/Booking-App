@@ -72,44 +72,50 @@ function goToBookingPage() {
 .hotelInfo {
     display: flex;
     flex-direction: column;
+    padding: 10px;
 }
 
 .hotelInfo .mainInfo {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 
 .hotelInfo .mainInfo .info {
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    margin-left: 0;
+    margin-top: 10px;
 }
 
 .hotelInfo .mainInfo .name {
-    font-size: 24px;
+    font-size: 1.5rem;
+    /* Используем относительный размер */
     font-weight: 600;
 }
 
 .hotelInfo .mainInfo .location {
-    font-size: 12px;
+    font-size: 1rem;
+    color: #777;
 }
-
 
 .hotelInfo .description {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .hotelInfo .description .header {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .hotelInfo .description .content {
-    font-size: 12px;
-    width: 350px;
+    font-size: 1rem;
+    width: 100%;
+    /* Убираем фиксированную ширину для гибкости */
+    max-width: 350px;
 }
 
 .hotelInfo .tags {
@@ -121,7 +127,6 @@ function goToBookingPage() {
     margin: 10px;
 }
 
-
 .hotelInfo .pictures {
     display: flex;
     flex-direction: column;
@@ -129,7 +134,7 @@ function goToBookingPage() {
 }
 
 .hotelInfo .pictures .header {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -141,5 +146,53 @@ function goToBookingPage() {
     align-items: center;
     justify-content: center;
     margin: 10px;
+}
+
+/* Медиазапросы для более крупных экранов */
+@media (min-width: 600px) {
+    .hotelInfo .mainInfo {
+        flex-direction: row;
+        /* Меняем расположение на экранах шире 600px */
+    }
+
+    .hotelInfo .mainInfo .info {
+        margin-left: 10px;
+    }
+
+    .hotelInfo .description .content {
+        width: 100%;
+        /* Ширина текста на экранах больше 600px */
+    }
+
+    .hotelInfo .pictures .content {
+        grid-template-columns: repeat(3, 150px);
+        /* Увеличиваем количество столбцов */
+    }
+}
+
+/* Для экрана больше 1024px */
+@media (min-width: 1024px) {
+    .hotelInfo .mainInfo .name {
+        font-size: 2rem;
+        /* Увеличиваем шрифт для больших экранов */
+    }
+
+    .hotelInfo .mainInfo .location {
+        font-size: 1.2rem;
+    }
+
+    .hotelInfo .description .header {
+        font-size: 1.2rem;
+    }
+
+    .hotelInfo .tags {
+        grid-template-columns: repeat(4, auto);
+        /* Используем больше колонок для тегов */
+    }
+
+    .hotelInfo .pictures .content {
+        grid-template-columns: repeat(4, 1fr);
+        /* Для больших экранов показываем больше картинок в строке */
+    }
 }
 </style>

@@ -35,31 +35,69 @@ import Navbar from './NavbarComponent.vue';
 .bookingInfo {
     display: flex;
     flex-direction: column;
+    padding: 10px;
 }
 
 .bookingInfo .hotelInfo {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .bookingInfo .hotelInfo .info {
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    margin-left: 0;
+    margin-top: 10px;
 }
 
 .bookingInfo .hotelInfo .name {
-    font-size: 24px;
+    font-size: 1.5rem;
+    /* Используем относительный размер шрифта */
     font-weight: 600;
 }
 
 .bookingInfo .hotelInfo .location {
-    font-size: 12px;
+    font-size: 1rem;
+    color: #777;
 }
 
 .bookingInfo .orderInfo {
-    margin: 10px;
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+}
+
+/* Медиазапросы для более крупных экранов */
+@media (min-width: 600px) {
+    .bookingInfo .hotelInfo {
+        flex-direction: row;
+        /* На экранах шире 600px используем горизонтальную компоновку */
+    }
+
+    .bookingInfo .hotelInfo .info {
+        margin-left: 10px;
+    }
+
+    .bookingInfo .hotelInfo .name {
+        font-size: 1.8rem;
+        /* Увеличиваем размер шрифта */
+    }
+
+    .bookingInfo .hotelInfo .location {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bookingInfo .hotelInfo .name {
+        font-size: 2rem;
+        /* Для больших экранов ещё больше увеличиваем шрифт */
+    }
+
+    .bookingInfo .hotelInfo .location {
+        font-size: 1.4rem;
+    }
 }
 </style>
