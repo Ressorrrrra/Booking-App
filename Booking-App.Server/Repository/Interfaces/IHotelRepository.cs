@@ -4,8 +4,8 @@ namespace Booking_App.Server.Repository.Interfaces
 {
     public interface IHotelRepository
     {
-        public async Hotel? GetHotel(int id);
-        public async List<Hotel>? GetHotels();
-        public void CreateHotel(Hotel hotel);
+        public Task<Hotel?> GetHotel(int id);
+        public Task<List<Hotel>?> GetHotels();
+        public Task CreateHotel(Hotel hotel);
     }
 }

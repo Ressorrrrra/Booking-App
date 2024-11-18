@@ -13,17 +13,17 @@ namespace Booking_App.Server.Repository
             db = bookingContext;
         }
 
-        public async Task<Hotel?> GetHotelAsync(int id)
+        public async Task<Hotel?> GetHotel(int id)
         {
             return await db.Hotels.FindAsync(id);
         }
 
-        public async Task<List<Hotel>> GetHotelsAsync()
+        public async Task<List<Hotel>> GetHotels()
         {
             return await db.Hotels.ToListAsync();
         }
 
-        public async Task CreateHotelAsync(Hotel hotel)
+        public async Task CreateHotel(Hotel hotel)
         {
             await db.Hotels.AddAsync(hotel);
             await SaveAsync();

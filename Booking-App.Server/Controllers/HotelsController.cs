@@ -26,8 +26,8 @@ namespace Booking_App.Server.Controllers
         [HttpGet("GetHotels")]
         public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
-            
-            return Ok(_hotelService.GetHotels());
+            var hotels = await _hotelService.GetHotels();
+            return Ok(hotels);
         }
 
         [HttpPost("PostHotel")]
@@ -38,7 +38,7 @@ namespace Booking_App.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            _hotelService.CreateHotel(hotel);
+            await _hotelService.CreateHotel(hotel);
             return Created();
         }
     }

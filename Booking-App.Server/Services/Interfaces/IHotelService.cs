@@ -4,9 +4,9 @@ namespace Booking_App.Server.Services.Interfaces
 {
     public interface IHotelService
     {
-        public Hotel? GetHotel(int id);
+        public Task<Hotel?> GetHotel(int id);
 
-        public List<Hotel>? GetHotels();
-        public void CreateHotel(Hotel hotel);
+        public Task<List<Hotel>?> GetHotels();
+        public Task CreateHotel(Hotel hotel);
     }
 }

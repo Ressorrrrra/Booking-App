@@ -13,19 +13,19 @@ namespace Booking_App.Server.Services
             _hotelRepository = hotelRepository;
         }
 
-        public void CreateHotel(Hotel hotel)
+        public async Task CreateHotel(Hotel hotel)
         {
             _hotelRepository.CreateHotel(hotel);
         }
 
-        public Hotel? GetHotel(int id)
+        public async Task<Hotel?> GetHotel(int id)
         {
-            return _hotelRepository.GetHotel(id);
+            return await _hotelRepository.GetHotel(id);
         }
 
-        public List<Hotel>? GetHotels()
+        public async Task<List<Hotel>?> GetHotels()
         {
-            return _hotelRepository.GetHotels();
+            return await _hotelRepository.GetHotels();
         }
     }
 }
