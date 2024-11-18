@@ -69,6 +69,8 @@ function goToRegistration() {
     grid-template-columns: 1fr;
     gap: 15px;
     width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (min-width: 600px) {

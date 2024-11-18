@@ -8,12 +8,12 @@
             </IftaLabel>
 
             <IftaLabel class="field">
-                <Password name="password" :feedback="false" />
+                <Password name="password" :feedback="false" fluid />
                 <label for="password">Пароль: </label>
             </IftaLabel>
 
             <IftaLabel class="field">
-                <Password name="confirm_password" :feedback="false" />
+                <Password name="confirm_password" :feedback="false" fluid />
                 <label for="confirm_password">Подтвердите пароль: </label>
             </IftaLabel>
 

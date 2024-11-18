@@ -54,22 +54,13 @@
             </div>
 
         </div>
-
+        <Navbar></Navbar>
     </Form>
 
-    <Navbar></Navbar>
+
 
 </template>
 
-<script>
-export default {
-    methods: {
-        goToProfile() {
-            this.$router.push({ name: 'profile' });
-        },
-    },
-}
-</script>
 
 <script setup>
 import { Form } from '@primevue/forms';
@@ -81,11 +72,10 @@ import AutoComplete from 'primevue/autocomplete';
 import { useRouter } from 'vue-router';
 import Navbar from './NavbarComponent.vue';
 
-const router = useRouter();
+
 
 function onFormSubmit(values) {
     console.log('Form submitted with:', values);
-    router.push({ name: 'profile' });
 }
 </script>
 
@@ -95,14 +85,12 @@ function onFormSubmit(values) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
     /* Добавлены отступы для лучшего восприятия */
 }
 
 /* Медиазапрос для мобильных устройств */
 @media (max-width: 600px) {
     .form {
-        padding: 5px;
         /* Уменьшаем отступы на мобильных устройствах */
     }
 
@@ -153,7 +141,7 @@ function onFormSubmit(values) {
 }
 
 .form .optionsDiv {
-    margin: 10px;
+
     display: flex;
     flex-direction: column;
     align-items: center;

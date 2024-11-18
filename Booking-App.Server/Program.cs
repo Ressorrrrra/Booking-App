@@ -14,6 +14,10 @@ namespace Booking_App.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.CreateDependencies(connectionString);
+
             var app = builder.Build();
 
             app.UseDefaultFiles();

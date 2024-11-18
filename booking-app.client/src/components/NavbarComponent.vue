@@ -1,15 +1,18 @@
 <template>
     <Toolbar class="navbar">
         <template #start>
-            <Button label="Поиск" @click="goToSearch"></Button>
+            <Button class="button" label="Поиск" @click="goToSearch" icon="pi pi-search" iconPos="top"
+                variant="link"></Button>
         </template>
 
         <template #center>
-            <Button label="Главная" @click="goToMainPage"></Button>
+            <Button class="button" label="Главная" @click="goToMainPage" icon="pi pi-home" iconPos="top"
+                variant="link"></Button>
         </template>
 
         <template #end>
-            <Button label="Мой профиль" @click="goToProfile"></Button>
+            <Button class="button" label="Профиль" @click="goToProfile" icon="pi pi-user" iconPos="top"
+                variant="link"></Button>
         </template>
     </Toolbar>
 </template>
@@ -36,10 +39,11 @@ function goToProfile() {
 
 <style>
 .navbar {
-    justify-content: center;
-    align-items: center;
+    width: 100%;
     margin-top: 20px;
     position: fixed;
     bottom: 0;
 }
+
+.navbar .button {}
 </style>

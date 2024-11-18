@@ -2,7 +2,7 @@
     <div class="mainPage">
         <RecentHotels></RecentHotels>
         <p class="header">Популярные направления</p>
-        <ScrollPanel class="scrollView">
+        <ScrollPanel>
             <HotelList></HotelList>
         </ScrollPanel>
         <Navbar class="navbar"></Navbar>
@@ -22,7 +22,10 @@ import ScrollPanel from 'primevue/scrollpanel';
     flex-direction: column;
     column-gap: 100px;
     padding: 20px;
+    height: auto;
+
 }
+
 
 .mainPage .header {
     font-size: 1.5rem;
@@ -31,9 +34,6 @@ import ScrollPanel from 'primevue/scrollpanel';
     margin-bottom: 20px;
 }
 
-.mainPage .scrollView {
-    height: 200px;
-}
 
 /* Медиазапросы для мобильных устройств */
 @media (max-width: 600px) {

@@ -160,7 +160,7 @@ function goToBookingInfo() {
 /* Стиль для планшетов и больших экранов */
 @media (min-width: 600px) {
     .bookingHistory {
-        height: 200px;
+        height: auto;
         /* Для планшетов и десктопов устанавливаем фиксированную высоту */
     }
 }
