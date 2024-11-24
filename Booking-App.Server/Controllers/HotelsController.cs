@@ -8,26 +8,34 @@ using Microsoft.EntityFrameworkCore;
 using Booking_App.Server.Models;
 using Microsoft.AspNetCore.Cors;
 using Booking_App.Server.Services;
+using Booking_App.Server.Services.Interfaces;
 
 namespace Booking_App.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class HotelsController : ControllerBase
     {
-        private readonly HotelService _hotelService;
+        private readonly IHotelService _hotelService;
 
-        public HotelsController(HotelService hotelService)
+        public HotelsController(IHotelService hotelService)
         {
             _hotelService = hotelService;
         }
 
         // GET: Hotel
-        [HttpGet("GetHotels")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
             var hotels = await _hotelService.GetHotels();
             return Ok(hotels);
+        }
+        // GET: api/Hotels/2
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelById(int id)
+        {
+            var hotel = await _hotelService.GetHotel(id);
+            return Ok(hotel);
         }
 
         [HttpPost("PostHotel")]

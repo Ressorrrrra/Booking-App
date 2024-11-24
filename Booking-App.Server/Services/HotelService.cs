@@ -1,21 +1,22 @@
 ﻿using Booking_App.Server.Models;
 using Booking_App.Server.Repository;
+using Booking_App.Server.Repository.Interfaces;
 using Booking_App.Server.Services.Interfaces;
 
 namespace Booking_App.Server.Services
 {
     public class HotelService : IHotelService
     {
-        private HotelRepository _hotelRepository;
+        private readonly IHotelRepository _hotelRepository;
 
-        public HotelService(HotelRepository hotelRepository)
+        public HotelService(IHotelRepository hotelRepository)
         {
             _hotelRepository = hotelRepository;
         }
 
         public async Task CreateHotel(Hotel hotel)
         {
-            _hotelRepository.CreateHotel(hotel);
+            await _hotelRepository.CreateHotel(hotel);
         }
 
         public async Task<Hotel?> GetHotel(int id)
