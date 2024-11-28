@@ -10,6 +10,6 @@
 
         public List<string> Tags { get; set; }
         public List<string> PictureLinks { get; set; }
-        public ICollection<Room> Rooms { get; set; }
+        public ICollection<Room>? Rooms { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using Booking_App.Server.Models;
 using Microsoft.AspNetCore.Cors;
 using Booking_App.Server.Services;
 using Booking_App.Server.Services.Interfaces;
+using Booking_App.Server.DTO;
 
 namespace Booking_App.Server.Controllers
 {
@@ -35,10 +36,11 @@ namespace Booking_App.Server.Controllers
         public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelById(int id)
         {
             var hotel = await _hotelService.GetHotel(id);
-            return Ok(hotel);
+            if (hotel == null) return NotFound();
+            else return Ok(hotel);
         }
 
-        [HttpPost("PostHotel")]
+        [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
             if (!ModelState.IsValid)
@@ -48,6 +50,56 @@ namespace Booking_App.Server.Controllers
 
             await _hotelService.CreateHotel(hotel);
             return Created();
+        }
+        
+        [HttpPost("SearchHotels")]
+        public async Task<ActionResult<List<HotelShortDTO>>> SearchHotels([FromBody] HotelSearchRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var hotels = await _hotelService.SearchHotels(request);
+
+            if (hotels == null) return NotFound();
+            else return Ok(hotels);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteHotel(int id)
+        {
+            bool result = await _hotelService.DeleteHotel(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateHotel(int id, [FromBody] Hotel hotel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool result = await _hotelService.UpdateHotel(hotel, id);
+
+            if (result)
+            {
+                return Ok(hotel);
+            }
+            else
+            {
+                return NotFound();
+            }
+
         }
     }
 }

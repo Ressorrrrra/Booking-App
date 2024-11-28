@@ -9,27 +9,50 @@ import BookingInfoComponent from "./components/BookingInfoComponent.vue";
 import RegistrationComponent from "./components/RegistrationComponent.vue";
 
 const routes = [
-  { path: "/", component: LoginComponent, name: "login" },
+  {
+    path: "/",
+    component: LoginComponent,
+    name: "login"
+  },
   {
     path: "/registration",
     component: RegistrationComponent,
     name: "registration"
   },
-  { path: "/profile", component: ProfileComponent, name: "profile" },
-  { path: "/search", component: SearchComponent, name: "search" },
-  { path: "/mainpage", component: MainPageComponent, name: "mainpage" },
-  { path: "/hotelinfo", component: HotelInfoComponent, name: "hotelinfo" },
   {
-    path: "/bookinginfo",
+    path: "/profile",
+    component: ProfileComponent,
+    name: "profile"
+  },
+  {
+    path: "/search",
+    component: SearchComponent,
+    name: "search"
+  },
+  {
+    path: "/mainpage",
+    component: MainPageComponent,
+    name: "mainpage"
+  },
+  {
+    path: "/hotelinfo/:id", // Добавлен параметр id
+    component: HotelInfoComponent,
+    name: "hotelinfo"
+  },
+  {
+    path: "/bookinginfo/:id", // Если требуется параметр id
     component: BookingInfoComponent,
     name: "bookinginfo"
   },
   {
-    path: "/bookingpage",
+    path: "/bookingpage/:id", // Если требуется параметр id
     component: BookingPageComponent,
     name: "bookingpage"
   },
-  { path: "/:pathMatch(.*)*", redirect: "/" }
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/"
+  }
 ];
 
 const router = createRouter({

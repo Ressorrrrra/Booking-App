@@ -4,6 +4,7 @@ using Booking_App.Server.Repository.Interfaces;
 using Booking_App.Server.Services;
 using Booking_App.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Booking_App.Server
@@ -17,7 +18,14 @@ namespace Booking_App.Server
 
             services
                 .AddScoped<IHotelRepository, HotelRepository>()
-                .AddScoped<IHotelService, HotelService>();
+                .AddScoped<IHotelService, HotelService>()
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IOrderRepository, OrderRepository>()
+                .AddScoped<IOrderService, OrderService>()
+                .AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<BookingContext>();
+
 
             return services;
         }

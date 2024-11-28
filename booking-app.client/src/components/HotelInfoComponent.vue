@@ -1,71 +1,69 @@
 <template>
-    <div class="hotelInfo">
+    <div class="hotelInfo" v-if="hotel">
         <div class="mainInfo">
-            <Image
-                src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                preview width="256" />
+            <Image :src="hotel.pictureLinks[0]" preview width="256" />
             <div class="info">
-                <p>The Langham Gold Coast</p>
-                <p>Австралия, Голд-Кост </p>
-                <Button label="Забронировать номер" @click="goToBookingPage"></Button>
+                <p class="name">{{ hotel.name }}</p>
+                <p class="location">{{ hotel.city }}, {{ hotel.country }}</p>
+                <Button label="Забронировать номер" @click="goToBookingPage" />
             </div>
         </div>
 
         <div class="description">
-            <p class="header"></p>
-            <p class="content">
-                The Langham, Gold Coast and Jewel Residences — это отель с 5 звездами на первой линии города Голд-Кост.
-                В распоряжении гостей открытый бассейн, фитнес-центр и ресторан.
-            </p>
+            <p class="header">Описание</p>
+            <p class="content">{{ hotel.description }}</p>
         </div>
-        <div class="tags">
-            <Tag value="Бассейн"></Tag>
-            <Tag value="Wi-Fi"></Tag>
-            <Tag value="Ресторан"></Tag>
-            <Tag value="Спортзал"></Tag>
+
+        <div class="tags" v-if="hotel.tags.length">
+            <Tag v-for="(tag, index) in hotel.tags" :key="index" :value="tag" />
         </div>
-        <p> </p>
+
         <div class="pictures">
             <p class="header">Фотографии</p>
             <div class="content">
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
-                <Image
-                    src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                    preview width="150"></Image>
+                <Image v-for="(picture, index) in hotel.pictureLinks" :key="index" :src="picture" preview width="150" />
             </div>
         </div>
-        <Navbar></Navbar>
+
+        <Navbar />
+    </div>
+
+    <div v-else>
+        <p>Загрузка данных об отеле...</p>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
-const router = useRouter()
+// Используем reactive переменные
+const router = useRouter();
+const route = useRoute();
+const hotel = ref(null);
 
-function goToBookingPage() {
-    router.push({ name: 'bookingpage' })
+async function fetchHotelData() {
+    try {
+        const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
+        const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
+        console.log(`https://localhost:7273/api/Hotels/${hotelId}`)
+        if (!response.ok) throw new Error('Ошибка при загрузке данных');
+        hotel.value = await response.json();
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
 }
 
+function goToBookingPage() {
+    router.push({ name: 'bookingpage', params: { id: route.params.id } });
+}
 
+// Загружаем данные при монтировании компонента
+onMounted(fetchHotelData);
 </script>
 
 <style>

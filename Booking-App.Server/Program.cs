@@ -1,11 +1,27 @@
 
+using Booking_App.Server.Models;
+using Microsoft.AspNetCore.Identity;
+
 namespace Booking_App.Server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:5174")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                    });
+            });
 
             // Add services to the container.
 
@@ -18,7 +34,15 @@ namespace Booking_App.Server
 
             builder.Services.CreateDependencies(connectionString);
 
+
+
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                await IdentitySeed.CreateUserRoles(scope.ServiceProvider);
+            }
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -30,10 +54,12 @@ namespace Booking_App.Server
                 app.UseSwaggerUI();
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
+            app.UseCors();
 
             app.MapControllers();
 

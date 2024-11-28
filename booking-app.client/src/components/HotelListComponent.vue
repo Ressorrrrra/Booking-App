@@ -1,49 +1,57 @@
 <template>
     <div class="hotelList">
-
-
-        <div class="item">
-            <Image
-                src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                width="150" height="110" />
-
+        <div v-for="hotel in hotels" :key="hotel.id" class="item">
+            <Image :src="hotel.pictureLinks[0]" width="150" height="110" />
             <div class="info">
-                <p class="hotelName">The Langham Gold Coast</p>
-                <p class="price">От 12 450₽ за ночь</p>
-                <p class="location">Австралия, Голд-Кост</p>
-                <Button label="Забронировать номер" @click="goToHotelInfo">
-                </Button>
-
-            </div>
-        </div>
-
-        <div class="item">
-            <Image
-                src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT2plxFL7HlgsNeuH-QPBuIfTZz2S65T0pM0VESfASZ77DoVIiK"
-                width="150" height="110" rounded />
-
-
-            <div class="info">
-                <p class="hotelName">YVE Hotel Miami</p>
-                <p class="price">От 15 699₽ за ночь</p>
-                <p class="location">США, Майами</p>
-                <Button label="Забронировать номер">
+                <p class="hotelName">{{ hotel.name }}</p>
+                <p class="price">От {{ hotel.price }}₽ за ночь</p>
+                <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
+                <Button label="Забронировать номер" @click="goToHotelInfo(hotel.id)">
                 </Button>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import { Button } from 'primevue';
 import { useRouter } from 'vue-router';
 import Image from 'primevue/image';
 
-const router = useRouter()
-function goToHotelInfo() {
-    router.push({ name: 'hotelinfo' });
+const hotels = ref([]); // Состояние для хранения списка отелей
+const router = useRouter();
+
+// Функция для получения данных с бэкенда
+async function fetchHotels() {
+    try {
+        const response = await fetch('https://localhost:7273/api/Hotels', {
+            method: 'GET', // Указываем HTTP-метод
+            headers: {
+                'Content-Type': 'application/json' // Заголовки, если нужны
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        hotels.value = data;
+    } catch (error) {
+        console.error('Ошибка при загрузке отелей:', error);
+    }
 }
+
+// Переход на страницу информации об отеле
+function goToHotelInfo(hotelId) {
+    router.push({ name: 'hotelinfo', params: { id: hotelId } });
+}
+
+// Загружаем данные при монтировании компонента
+onMounted(() => {
+    fetchHotels();
+});
 </script>
 
 <style>
