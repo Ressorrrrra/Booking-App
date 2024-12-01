@@ -24,7 +24,6 @@
                 <Image v-for="(picture, index) in hotel.pictureLinks" :key="index" :src="picture" preview width="150" />
             </div>
         </div>
-
         <Navbar />
     </div>
 
@@ -70,7 +69,8 @@ onMounted(fetchHotelData);
 .hotelInfo {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .hotelInfo .mainInfo {

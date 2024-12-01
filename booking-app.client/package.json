@@ -24,6 +24,8 @@
     "gradle": "^1.2.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.1",
+    "puppeteer": "^23.9.0",
+    "puppeteer-core": "^23.9.0",
     "vue": "^3.5.12",
     "vue-prettier": "^0.2.0",
     "vue-router": "^4.4.5"

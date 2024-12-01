@@ -41,12 +41,9 @@
                     </Button>
                 </div>
             </div>
-
-
         </ScrollPanel>
         <Navbar></Navbar>
     </div>
-
 
 
 </template>

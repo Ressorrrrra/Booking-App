@@ -1,35 +1,52 @@
 <template>
     <div class="hotelList">
-        <div v-for="hotel in hotels" :key="hotel.id" class="item">
-            <Image :src="hotel.pictureLinks[0]" width="150" height="110" />
-            <div class="info">
-                <p class="hotelName">{{ hotel.name }}</p>
-                <p class="price">От {{ hotel.price }}₽ за ночь</p>
-                <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
-                <Button label="Забронировать номер" @click="goToHotelInfo(hotel.id)">
-                </Button>
+        <div v-if="!hotels.length" class="noResults">
+            Ничего не найдено по вашему запросу
+        </div>
+        <div v-else>
+            <div v-for="hotel in hotels" :key="hotel.id" class="item">
+                <Image :src="hotel.pictureLinks[0]" width="150" height="110" />
+                <div class="info">
+                    <p class="hotelName">{{ hotel.name }}</p>
+                    <p class="price">От {{ hotel.price }}₽ за ночь</p>
+                    <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
+                    <Button label="Забронировать номер" @click="goToHotelInfo(hotel.id)" />
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { Button } from 'primevue';
 import { useRouter } from 'vue-router';
 import Image from 'primevue/image';
 
+// Проп с критериями поиска (может быть null или объектом с параметрами поиска)
+const props = defineProps({
+    criteria: {
+        type: Object,
+        default: () => null
+    }
+});
+
 const hotels = ref([]); // Состояние для хранения списка отелей
 const router = useRouter();
 
-// Функция для получения данных с бэкенда
-async function fetchHotels() {
+// Функция для получения данных с сервера
+async function fetchHotels(searchCriteria = null) {
     try {
-        const response = await fetch('https://localhost:7273/api/Hotels', {
-            method: 'GET', // Указываем HTTP-метод
+        const url = searchCriteria
+            ? 'https://localhost:7273/api/Hotels/search' // Эндпоинт для поиска
+            : 'https://localhost:7273/api/Hotels'; // Эндпоинт для всех отелей
+
+        const response = await fetch(url, {
+            method: searchCriteria ? 'POST' : 'GET', // Метод POST для поиска, GET для всех
             headers: {
-                'Content-Type': 'application/json' // Заголовки, если нужны
-            }
+                'Content-Type': 'application/json'
+            },
+            body: searchCriteria ? JSON.stringify(searchCriteria) : null
         });
 
         if (!response.ok) {
@@ -40,6 +57,7 @@ async function fetchHotels() {
         hotels.value = data;
     } catch (error) {
         console.error('Ошибка при загрузке отелей:', error);
+        hotels.value = []; // Очищаем список отелей в случае ошибки
     }
 }
 
@@ -48,11 +66,16 @@ function goToHotelInfo(hotelId) {
     router.push({ name: 'hotelinfo', params: { id: hotelId } });
 }
 
-// Загружаем данные при монтировании компонента
-onMounted(() => {
-    fetchHotels();
-});
+// Обновление данных при изменении критерия поиска
+watch(
+    () => props.criteria, // Доступ к критериям через props
+    (newCriteria) => {
+        fetchHotels(newCriteria);
+    },
+    { immediate: true }
+);
 </script>
+
 
 <style>
 .hotelList {

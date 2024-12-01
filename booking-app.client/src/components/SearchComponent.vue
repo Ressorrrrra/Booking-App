@@ -1,10 +1,11 @@
 <template>
     <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="form">
         <div class="div">
-            <IconField>
-                <InputText name="hotelname" type="text" placeholder="Поиск" fluid icon />
-                <InputIcon class="pi pi-search" />
-            </IconField>
+            <div>
+                <InputText name="hotelname" type="text" placeholder="Поиск" fluid icon @keyup.enter="onFormSubmit" />
+                <Button text="sadsd"></Button>
+            </div>
+
             <div class="optionsDiv">
                 <p>Время проживания</p>
 
@@ -54,7 +55,8 @@
             </div>
 
         </div>
-        <Navbar></Navbar>
+        <HotelList />
+        <Navbar />
     </Form>
 
 
@@ -69,14 +71,43 @@ import InputIcon from 'primevue/inputicon';
 import IconField from 'primevue/iconfield';
 import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
-import { useRouter } from 'vue-router';
 import Navbar from './NavbarComponent.vue';
+import HotelList from './HotelListComponent.vue';
+import Button from 'primevue/button';
 
+async function onFormSubmit(values) {
+    const searchRequest = {
+        name: $form.name,
+        arrivalDate: values.arrivalDate,
+        departureDate: values.departureDate,
+        country: values.country,
+        city: values.city,
+        minPrice: values.minPrice,
+        maxPrice: values.maxPrice
+    };
 
+    console.log('Отправка запроса:', searchRequest);
 
-function onFormSubmit(values) {
-    console.log('Form submitted with:', values);
+    try {
+        const response = await fetch('https://localhost:7273/api/Hotels/SearchHotels', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchRequest)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+
+        const hotels = await response.json();
+        console.log('Полученные данные:', hotels);
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error.message);
+    }
 }
+
 </script>
 
 <style>

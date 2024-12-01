@@ -35,7 +35,8 @@ import Navbar from './NavbarComponent.vue';
 .bookingInfo {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .bookingInfo .hotelInfo {

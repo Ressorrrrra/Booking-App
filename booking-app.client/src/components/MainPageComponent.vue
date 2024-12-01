@@ -5,7 +5,7 @@
         <ScrollPanel>
             <HotelList></HotelList>
         </ScrollPanel>
-        <Navbar class="navbar"></Navbar>
+        <Navbar class="navbar" :criteria=null></Navbar>
     </div>
 </template>
 

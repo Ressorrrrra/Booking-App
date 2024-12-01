@@ -17,6 +17,9 @@ namespace Booking_App.Server
                 options.AddDefaultPolicy(
                     builder =>
                     {
+                        builder.WithOrigins("https://localhost:5173")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
                         builder.WithOrigins("https://localhost:5174")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();

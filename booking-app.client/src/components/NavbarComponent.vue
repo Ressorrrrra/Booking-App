@@ -39,10 +39,11 @@ function goToProfile() {
 
 <style>
 .navbar {
-    width: 100%;
+    width: 105%;
     margin-top: 20px;
     position: fixed;
     bottom: 0;
+    z-index: 100;
 }
 
 .navbar .button {}
