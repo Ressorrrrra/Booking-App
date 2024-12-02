@@ -1,10 +1,10 @@
 <template>
-    <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="form">
+    <Form v-slot="$form" :initialValues="initialValues" @submit="onFormSubmit" class="form">
         <div class="div">
-            <div>
-                <InputText name="hotelname" type="text" placeholder="Поиск" fluid icon @keyup.enter="onFormSubmit" />
-                <Button text="sadsd"></Button>
-            </div>
+            <IconField>
+                <InputText name="name" type="text" placeholder="Поиск" fluid icon @keyup.enter="requestSubmit" />
+                <InputIcon class="pi pi-search" @click="requestSubmit"></InputIcon>
+            </IconField>
 
             <div class="optionsDiv">
                 <p>Время проживания</p>
@@ -44,18 +44,20 @@
                 <div class="options">
                     <div>
                         <p>От</p>
-                        <AutoComplete name="bottomPrice" dropdown />
+                        <AutoComplete name="minPrice" dropdown />
                     </div>
 
                     <div>
                         <p>До</p>
-                        <AutoComplete name="topPrice" dropdown />
+                        <AutoComplete name="maxPrice" dropdown />
                     </div>
+
+
                 </div>
             </div>
 
         </div>
-        <HotelList />
+        <HotelList :criteria="searchRequest" />
         <Navbar />
     </Form>
 
@@ -65,6 +67,7 @@
 
 
 <script setup>
+import { ref } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import InputIcon from 'primevue/inputicon';
@@ -73,39 +76,47 @@ import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
 import Navbar from './NavbarComponent.vue';
 import HotelList from './HotelListComponent.vue';
-import Button from 'primevue/button';
 
-async function onFormSubmit(values) {
-    const searchRequest = {
-        name: $form.name,
-        arrivalDate: values.arrivalDate,
-        departureDate: values.departureDate,
-        country: values.country,
-        city: values.city,
-        minPrice: values.minPrice,
-        maxPrice: values.maxPrice
+const initialValues = {
+    name: '',
+    arrivalDate: null, // Начальное значение для даты
+    departureDate: null, // Начальное значение для даты
+    country: '',
+    city: '',
+    minPrice: null,
+    maxPrice: null
+};
+
+const searchRequest = ref({
+    name: '',
+    arrivalDate: null,
+    departureDate: null,
+    country: '',
+    city: '',
+    minPrice: null,
+    maxPrice: null
+})
+
+async function requestSubmit() {
+    const myForm = document.querySelector("form");
+    myForm.requestSubmit();
+}
+
+async function onFormSubmit(form) {
+    searchRequest.value =
+    {
+        name: form.states.name.value,
+        arrivalDate: form.states.arrivalDate.value,
+        departureDate: form.states.departureDate.value,
+        country: form.states.country.value,
+        city: form.states.city.value,
+        minPrice: form.states.minPrice.value,
+        maxPrice: form.states.maxPrice.value
     };
 
-    console.log('Отправка запроса:', searchRequest);
+    console.log('Критерии поиска обновлены:', searchRequest);
 
-    try {
-        const response = await fetch('https://localhost:7273/api/Hotels/SearchHotels', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(searchRequest)
-        });
 
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
-        }
-
-        const hotels = await response.json();
-        console.log('Полученные данные:', hotels);
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error.message);
-    }
 }
 
 </script>

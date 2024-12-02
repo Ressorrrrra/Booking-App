@@ -39,7 +39,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-function onFormSubmit(values) {
+function onFormSubmit() {
     router.push({ name: 'profile' });
 }
 

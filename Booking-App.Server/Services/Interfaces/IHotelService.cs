@@ -8,6 +8,7 @@ namespace Booking_App.Server.Services.Interfaces
         public Task<Hotel?> GetHotel(int id);
 
         public Task<List<Hotel>?> GetHotels();
+        public Task<List<HotelShortDTO>?> GetHotelsDTO();
         public Task<List<HotelShortDTO>?> SearchHotels(HotelSearchRequest request);
         public Task<bool> DeleteHotel(int id);
         public Task<bool> UpdateHotel(Hotel hotel, int id);

@@ -70,11 +70,11 @@ namespace Booking_App.Server.Repository
             return await db.Hotels
             .Where(hotel =>
                 // Фильтрация по названию отеля (если указано)
-                (string.IsNullOrEmpty(request.Name) || hotel.Name.Contains(request.Name)) &&
+                (string.IsNullOrEmpty(request.Name) || hotel.Name.ToLower().Contains(request.Name.ToLower())) &&
                 // Фильтрация по стране (если указана)
-                (string.IsNullOrEmpty(request.Country) || hotel.Country == request.Country) &&
+                (string.IsNullOrEmpty(request.Country) || hotel.Country.ToLower() == request.Country.ToLower()) &&
                 // Фильтрация по городу (если указан)
-                (string.IsNullOrEmpty(request.City) || hotel.City == request.City) &&
+                (string.IsNullOrEmpty(request.City) || hotel.City.ToLower() == request.City.ToLower()) &&
                 // Проверка, что хотя бы один номер в отеле соответствует ценовому диапазону и доступен по датам
                 hotel.Rooms.Any(room =>
                     // Фильтрация по цене

@@ -5,7 +5,7 @@
         </div>
         <div v-else>
             <div v-for="hotel in hotels" :key="hotel.id" class="item">
-                <Image :src="hotel.pictureLinks[0]" width="150" height="110" />
+                <Image :src="hotel.picture" width="150" height="110" />
                 <div class="info">
                     <p class="hotelName">{{ hotel.name }}</p>
                     <p class="price">От {{ hotel.price }}₽ за ночь</p>
@@ -34,12 +34,14 @@ const props = defineProps({
 const hotels = ref([]); // Состояние для хранения списка отелей
 const router = useRouter();
 
+
 // Функция для получения данных с сервера
-async function fetchHotels(searchCriteria = null) {
+async function fetchHotels(searchCriteria) {
+    console.log(JSON.stringify(searchCriteria))
     try {
-        const url = searchCriteria
-            ? 'https://localhost:7273/api/Hotels/search' // Эндпоинт для поиска
-            : 'https://localhost:7273/api/Hotels'; // Эндпоинт для всех отелей
+        const url = searchCriteria ? 'https://localhost:7273/api/Hotels/SearchHotels' :
+            'https://localhost:7273/api/Hotels/GetHotelsDTO';
+
 
         const response = await fetch(url, {
             method: searchCriteria ? 'POST' : 'GET', // Метод POST для поиска, GET для всех
@@ -49,12 +51,14 @@ async function fetchHotels(searchCriteria = null) {
             body: searchCriteria ? JSON.stringify(searchCriteria) : null
         });
 
-        if (!response.ok) {
+
+        if (response.status != 404 && response.status != 200) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
-
         const data = await response.json();
+
         hotels.value = data;
+        console.log(hotels.value)
     } catch (error) {
         console.error('Ошибка при загрузке отелей:', error);
         hotels.value = []; // Очищаем список отелей в случае ошибки
@@ -70,6 +74,7 @@ function goToHotelInfo(hotelId) {
 watch(
     () => props.criteria, // Доступ к критериям через props
     (newCriteria) => {
+        console.log('Критерии поиска изменились:', newCriteria);
         fetchHotels(newCriteria);
     },
     { immediate: true }

@@ -31,6 +31,13 @@ namespace Booking_App.Server.Controllers
             var hotels = await _hotelService.GetHotels();
             return Ok(hotels);
         }
+
+        [HttpGet("GetHotelsDTO")]
+        public async Task<ActionResult<IEnumerable<HotelShortDTO>>> GetDto()
+        {
+            var hotels = await _hotelService.GetHotelsDTO();
+            return Ok(hotels);
+        }
         // GET: api/Hotels/2
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Hotel>>> GetHotelById(int id)

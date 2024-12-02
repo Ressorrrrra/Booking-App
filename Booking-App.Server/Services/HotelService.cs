@@ -35,6 +35,30 @@ namespace Booking_App.Server.Services
             return await _hotelRepository.GetHotels();
         }
 
+        public async Task<List<HotelShortDTO>?> GetHotelsDTO()
+        {
+            var hotels = await _hotelRepository.GetHotels();
+
+            if (hotels == null)
+                return null;
+
+            var hotelDtos = hotels
+                .Select(hotel => new HotelShortDTO
+                {
+                    Name = hotel.Name,
+                    Country = hotel.Country,
+                    City = hotel.City,
+                    Picture = hotel.PictureLinks[0],
+                    MinPrice = hotel.Rooms != null && hotel.Rooms.Any()
+                        ? hotel.Rooms.Min(room => room.Price) // Находим минимальную цену
+                        : null // Если номеров нет, выводим "N/A"
+
+                })
+                .ToList();
+
+            return hotelDtos;
+        }
+
         public async Task<List<HotelShortDTO>?> SearchHotels(HotelSearchRequest request)
         {
             var hotels = await _hotelRepository.SearchHotels(request);
@@ -48,9 +72,11 @@ namespace Booking_App.Server.Services
                     Name = hotel.Name,
                     Country = hotel.Country,
                     City = hotel.City,
+                    Picture = hotel.PictureLinks[0],
                     MinPrice = hotel.Rooms != null && hotel.Rooms.Any()
                         ? hotel.Rooms.Min(room => room.Price) // Находим минимальную цену
                         : null // Если номеров нет, выводим "N/A"
+
                 })
                 .ToList();
 
