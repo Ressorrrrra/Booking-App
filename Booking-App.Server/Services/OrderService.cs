@@ -33,6 +33,11 @@ namespace Booking_App.Server.Services
             return await _OrderRepository.GetOrders();
         }
 
+        public async Task<List<Order>?> GetUserOrders(string userId)
+        {
+            return await _OrderRepository.GetUserOrders(userId);
+        }
+
         public async Task<bool> UpdateOrder(Order order, int id)
         {
             return await _OrderRepository.UpdateOrder(order, id);

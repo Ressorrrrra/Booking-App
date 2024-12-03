@@ -18,7 +18,9 @@ namespace Booking_App.Server.Repository
 
         public async Task<Hotel?> GetHotel(int id)
         {
-            return await db.Hotels.FindAsync(id);
+            return await db.Hotels
+                .Include(h => h.Rooms) 
+                .FirstOrDefaultAsync(h => h.Id == id);
         }
 
         public async Task<List<Hotel>> GetHotels()

@@ -5,7 +5,7 @@
             <div class="info">
                 <p class="name">{{ hotel.name }}</p>
                 <p class="location">{{ hotel.city }}, {{ hotel.country }}</p>
-                <Button label="Забронировать номер" @click="goToBookingPage" />
+                <Button label="Забронировать номер" @click="goToBookingPage(hotel.id)" />
             </div>
         </div>
 
@@ -40,7 +40,6 @@ import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
 import { useRouter, useRoute } from 'vue-router';
 
-// Используем reactive переменные
 const router = useRouter();
 const route = useRoute();
 const hotel = ref(null);
@@ -57,8 +56,8 @@ async function fetchHotelData() {
     }
 }
 
-function goToBookingPage() {
-    router.push({ name: 'bookingpage', params: { id: route.params.id } });
+function goToBookingPage(hotelId) {
+    router.push({ name: 'bookingpage', params: { id: hotelId } });
 }
 
 // Загружаем данные при монтировании компонента

@@ -13,6 +13,7 @@
         public DateTime ArrivalDate { get; set; }
         public DateTime DepartureDate { get; set;}
         public DateTime OrderTime { get; set; }
+        public int OrderStatus { get; set; }
 
 
     }

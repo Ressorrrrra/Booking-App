@@ -1,12 +1,10 @@
 <template>
-    <div class="bookingInfo">
+    <Form class="bookingInfo" v-if="hotel">
         <div class="hotelInfo">
-            <Image
-                src="https://lh3.googleusercontent.com/proxy/n-I_hmG1lKkkRtgs-P1jTAbsQpFP2xUBlXdISQXvNxLoV9qnLkLM5q1RgkCKSffoxNphRJ9vVrgTENz37cHxco_GkviImRaKcGxGa-5iNousWN73RfH21-Y6y8OfFbTuXySYPn3EzLEAAdNkDTYUQdjUpU6NEw=s680-w680-h510"
-                preview width="256" />
+            <Image :src="hotel.pictureLinks[0]" preview width="256" />
             <div class="info">
-                <p>The Langham Gold Coast</p>
-                <p>Австралия, Голд-Кост </p>
+                <p class="name">{{ hotel.name }}</p>
+                <p class="location"> {{ hotel.country }}, {{ hotel.city }} </p>
                 <Button label="Забронировать номер" aut></Button>
             </div>
         </div>
@@ -38,10 +36,12 @@
 
         <div class="aviableRooms">
             <p class="header">Доступные номера</p>
-            <div class="content">
-                <Button class="button" label="1" rounded severity="secondary"></Button>
-                <Button class="button" label="2" rounded severity="secondary"></Button>
-                <Button class="button" label="3" rounded severity="secondary"></Button>
+            <div class="items">
+
+                <div v-for="room in hotel.rooms" :key="room.id" class="item">
+                    <Button class="button" :label="room.number" rounded severity="secondary"
+                        @click="chooseRoom(room.id)"></Button>
+                </div>
             </div>
 
         </div>
@@ -49,20 +49,47 @@
         <p class="price">Итого: 36 890 ₽</p>
 
         <Navbar></Navbar>
-    </div>
+    </Form>
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
 import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
+import { Form } from '@primevue/forms';
+import { useRoute, useRouter } from 'vue-router';
 
 const itemsAdults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+const hotel = ref(null);
+const router = useRouter();
+const route = useRoute();
+var chosenRoomId = -1;
+
+async function fetchHotelData() {
+    try {
+        const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
+        const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
+        console.log(`https://localhost:7273/api/Hotels/${hotelId}`)
+        if (!response.ok) throw new Error('Ошибка при загрузке данных');
+        hotel.value = await response.json();
+        console.log(hotel.value)
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+}
+
+function chooseRoom(roomId) {
+    chosenRoomId = roomId
+    console.log(chosenRoomId)
+}
 
 
+
+onMounted(fetchHotelData)
 </script>
 
 <style>
@@ -146,6 +173,7 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 .bookingInfo .aviableRooms {
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-top: 20px;
 }
 
@@ -154,7 +182,7 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     font-weight: 600;
 }
 
-.bookingInfo .aviableRooms .content {
+.bookingInfo .aviableRooms .items {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -163,9 +191,9 @@ const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     gap: 10px;
 }
 
-.bookingInfo .aviableRooms .content .button {
-    width: 128px;
-    height: 128px;
+.bookingInfo .aviableRooms .items .button {
+    width: 64px;
+    height: 64px;
     margin: 10px;
 }
 

@@ -60,5 +60,10 @@ namespace Booking_App.Server.Repository
             await SaveAsync();
             return true;
         }
+
+        public async Task<List<Order>?> GetUserOrders(string userId)
+        {
+            return await db.Orders.Where(o => o.UserId == userId).ToListAsync();
+        }
     }
 }

@@ -1,17 +1,27 @@
 <template>
-    <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="form">
+    <Form v-slot="$form" :initialValues="initialValues" :validateOnSubmit="true" :validateOnValueUpdate="false"
+        :validateOnBlur="true" @submit="onFormSubmit" class="form">
         <p class="headerForm">Авторизация</p>
         <div class="div">
-            <IftaLabel>
-                <label>Логин</label>
-                <InputText name="username" type="text" fluid />
-            </IftaLabel>
-            <IftaLabel>
-                <Password name="password" :feedback="false" fluid />
-                <label>Пароль</label>
-            </IftaLabel>
+            <FormField v-slot="$fieldEmail" :resolver="zodUserNameResolver" initialValue="">
+                <IftaLabel>
+                    <label>Логин</label>
+                    <InputText name="email" type="text" fluid :invalid="failedLogin" />
+                </IftaLabel>
+                <Message v-if="$fieldEmail?.invalid" severity="error" size="small" variant="simple">{{
+                    $fieldEmail.error?.message }}</Message>
+            </FormField>
+            <FormField v-slot="$fieldPassword">
+                <IftaLabel>
+                    <Password name="password" :feedback="false" fluid :invalid="failedLogin" />
+                    <label>Пароль</label>
+                </IftaLabel>
+                <Message v-if="$fieldPassword?.invalid" severity="error" size="small" variant="simple">{{
+                    $fieldPassword.error?.message }}</Message>
+            </FormField>
 
             <Button type="submit" label="Войти" />
+            <Message v-if="failedLogin">{{ errorMessage }}</Message>
             <p> Нет аккаунта? <span @click="goToRegistration">Зарегистрироваться</span></p>
         </div>
 
@@ -30,17 +40,58 @@ export default {
 </script>
 
 <script setup>
+import { ref } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Password from 'primevue/password';
 import IftaLabel from 'primevue/iftalabel';
 import { useRouter } from 'vue-router';
+import { Message } from 'primevue';
+
+var failedLogin = ref(false);
+var errorMessage = ref("");
 
 const router = useRouter();
 
-function onFormSubmit() {
-    router.push({ name: 'profile' });
+const loginRequest = {
+    email: "",
+    password: "",
+    rememberMe: false
+}
+
+const initialValues = {
+    email: "",
+    password: "",
+}
+
+async function onFormSubmit(form) {
+    console.log(form.states)
+    loginRequest.email = form.states.email.value
+    loginRequest.password = form.states.password.value
+    try {
+        const url = `https://localhost:7273/api/Accounts/login`;
+
+        const response = await fetch(url, {
+            method: 'POST', // Метод POST для поиска, GET для всех
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginRequest)
+        });
+
+        if (response.ok)
+            router.push({ name: 'mainpage' });
+        else if (response.status === 401) {
+            failedLogin.value = true;
+            errorMessage.value = "Неправильно указан логин и/или пароль"
+        }
+        else throw new Error('Ошибка при попытке авторизации');
+    } catch (error) {
+        console.error('Ошибка:', error);
+        errorMessage.value = error;
+    }
+
 }
 
 function goToRegistration() {

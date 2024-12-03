@@ -45,6 +45,7 @@ namespace Booking_App.Server.Services
             var hotelDtos = hotels
                 .Select(hotel => new HotelShortDTO
                 {
+                    Id = hotel.Id,
                     Name = hotel.Name,
                     Country = hotel.Country,
                     City = hotel.City,
@@ -69,6 +70,7 @@ namespace Booking_App.Server.Services
             var hotelDtos = hotels
                 .Select(hotel => new HotelShortDTO
                 {
+                    Id = hotel.Id,
                     Name = hotel.Name,
                     Country = hotel.Country,
                     City = hotel.City,
