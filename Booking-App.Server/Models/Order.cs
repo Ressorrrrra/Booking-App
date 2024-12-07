@@ -8,13 +8,12 @@
         public string UserId {  get; set; }
         public User? User { get; set; }
         public decimal TotalPrice { get; set; }
-        public int AdultResidentAmount {  get; set; }
+        public int AdultsAmount {  get; set; }
         public int ChildrenAmount { get; set; }
         public DateTime ArrivalDate { get; set; }
         public DateTime DepartureDate { get; set;}
         public DateTime OrderTime { get; set; }
-        public int OrderStatus { get; set; }
-
+        public PaymentStatus? PaymentStatus { get; set; }
 
     }
 }

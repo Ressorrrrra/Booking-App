@@ -40,7 +40,7 @@ export default {
 </script>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -48,6 +48,7 @@ import Password from 'primevue/password';
 import IftaLabel from 'primevue/iftalabel';
 import { useRouter } from 'vue-router';
 import { Message } from 'primevue';
+import { checkAuth, onUserLogin, useUser } from '@/plugins/userStatePlugin';
 
 var failedLogin = ref(false);
 var errorMessage = ref("");
@@ -55,9 +56,9 @@ var errorMessage = ref("");
 const router = useRouter();
 
 const loginRequest = {
-    email: "",
+    userName: "",
     password: "",
-    rememberMe: false
+    rememberMe: true
 }
 
 const initialValues = {
@@ -66,7 +67,6 @@ const initialValues = {
 }
 
 async function onFormSubmit(form) {
-    console.log(form.states)
     loginRequest.email = form.states.email.value
     loginRequest.password = form.states.password.value
     try {
@@ -80,8 +80,13 @@ async function onFormSubmit(form) {
             body: JSON.stringify(loginRequest)
         });
 
-        if (response.ok)
-            router.push({ name: 'mainpage' });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data)
+            onUserLogin({ userName: data.userName, roles: data.userRole })
+            console.log(response)
+            goToMainPage()
+        }
         else if (response.status === 401) {
             failedLogin.value = true;
             errorMessage.value = "Неправильно указан логин и/или пароль"
@@ -94,9 +99,20 @@ async function onFormSubmit(form) {
 
 }
 
+function goToMainPage() {
+    router.push({ name: 'mainpage' });
+}
+
 function goToRegistration() {
     router.push({ name: 'registration' });
 }
+
+function _checkAuth() {
+    checkAuth()
+    console.log(useUser().value.isAuthorized)
+    if (useUser().value.isAuthorized) goToMainPage()
+}
+onMounted(_checkAuth)
 </script>
 
 <style>

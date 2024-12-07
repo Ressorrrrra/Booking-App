@@ -37,7 +37,6 @@ const router = useRouter();
 
 // Функция для получения данных с сервера
 async function fetchHotels(searchCriteria) {
-    console.log(JSON.stringify(searchCriteria))
     try {
         const url = searchCriteria ? 'https://localhost:7273/api/Hotels/SearchHotels' :
             'https://localhost:7273/api/Hotels/GetHotelsDTO';

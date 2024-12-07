@@ -1,5 +1,5 @@
 <template>
-    <Form class="bookingInfo" v-if="hotel">
+    <Form class="bookingInfo" v-if="hotel" @submit="bookRoom">
         <div class="hotelInfo">
             <Image :src="hotel.pictureLinks[0]" preview width="256" />
             <div class="info">
@@ -12,11 +12,12 @@
         <div class="dates">
             <div class="item">
                 <p class="header">Дата прибытия:</p>
-                <DatePicker showIcon iconDisplay="input"></DatePicker>
+                <DatePicker showIcon iconDisplay="input" name="arrivalDate" @update:modelValue="GetPrice"></DatePicker>
             </div>
             <div class="item">
                 <p class="header">Дата отбытия:</p>
-                <DatePicker showIcon iconDisplay="input"></DatePicker>
+                <DatePicker showIcon iconDisplay="input" name="departureDate" @update:modelValue="GetPrice">
+                </DatePicker>
             </div>
         </div>
 
@@ -25,11 +26,11 @@
             <div class="content">
                 <div class="item">
                     <p class="header">Взрослых:</p>
-                    <AutoComplete v-model="value" dropdown :suggestions="itemsAdults" />
+                    <AutoComplete name="adultsAmount" dropdown :suggestions="itemsAdults" />
                 </div>
                 <div class="item">
                     <p class="header">Детей:</p>
-                    <AutoComplete v-model="value" dropdown :suggestions="itemsChildren" />
+                    <AutoComplete name="childrenAmount" dropdown :suggestions="itemsChildren" />
                 </div>
             </div>
         </div>
@@ -39,14 +40,16 @@
             <div class="items">
 
                 <div v-for="room in hotel.rooms" :key="room.id" class="item">
-                    <Button class="button" :label="room.number" rounded severity="secondary"
+                    <Button class="button" :style="{ backgroundColor: room.id === chosenRoomId ? 'lightgreen' : '' }"
+                        :label="room.number.toString()" rounded severity="secondary"
                         @click="chooseRoom(room.id)"></Button>
                 </div>
             </div>
 
         </div>
 
-        <p class="price">Итого: 36 890 ₽</p>
+        <p class="price">{{ totalPrice }}
+        </p>
 
         <Navbar></Navbar>
     </Form>
@@ -61,33 +64,114 @@ import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
 import { Form } from '@primevue/forms';
 import { useRoute, useRouter } from 'vue-router';
+import { useUser } from '@/plugins/userStatePlugin';
 
 const itemsAdults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const hotel = ref(null);
 const router = useRouter();
 const route = useRoute();
-var chosenRoomId = -1;
+var chosenRoomId = ref(-1);
+var totalPrice = ref(0);
+var priceRequest = {
+    roomId: -1,
+    arrivalDate: Date.now(),
+    departureDate: Date.now(),
+    childrenAmount: 0,
+    adultsAmount: 0,
+}
+
+
 
 async function fetchHotelData() {
+    if (!useUser().value.isAuthorized) goToLogin()
+    else {
+        try {
+            const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
+            const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
+            if (!response.ok) throw new Error('Ошибка при загрузке данных');
+            hotel.value = await response.json();
+            console.log(hotel.value)
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+}
+
+async function GetPrice(form) {
+    console.log(form, "putis")
+    const url = `https://localhost:7273/api/Orders/GetPrice_${chosenRoomId.value}`
+
+    priceRequest =
+    {
+        roomId: chosenRoomId,
+        arrivalDate: form.states.arrivalDate.value,
+        departureDate: form.states.departureDate.value,
+        childrenAmount: form.states.childrenAmount.value,
+        adultsAmount: form.states.adultsAmount.value,
+    }
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(priceRequest)
+    });
+
+    if (response.ok) {
+        const data = await response.json()
+        totalPrice.value = data.totalPrice
+    }
+}
+
+async function bookRoom(form) {
     try {
-        const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
-        const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
-        console.log(`https://localhost:7273/api/Hotels/${hotelId}`)
-        if (!response.ok) throw new Error('Ошибка при загрузке данных');
-        hotel.value = await response.json();
-        console.log(hotel.value)
+        const url = 'https://localhost:7273/api/Orders';
+
+        request =
+        {
+            roomId: chosenRoomId,
+            arrivalDate: form.states.arrivalDate.value,
+            departureDate: form.states.departureDate.value,
+            childrenAmount: form.states.childrenAmount.value,
+            adultsAmount: form.states.adultsAmount.value,
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+
+        if (response.status != 404 && response.status != 201) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+        if (response.status === 201) {
+            goToProfile();
+        }
+
     } catch (error) {
-        console.error('Ошибка:', error);
+        console.error('Ошибка при оформлении заказа отелей:', error);
     }
 }
 
 function chooseRoom(roomId) {
-    chosenRoomId = roomId
+    chosenRoomId.value = roomId
+
     console.log(chosenRoomId)
 }
 
+function goToProfile() {
 
+}
+
+function goToLogin() {
+    router.push({ name: 'login' });
+}
 
 onMounted(fetchHotelData)
 </script>

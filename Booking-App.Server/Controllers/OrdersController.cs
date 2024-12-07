@@ -1,4 +1,5 @@
 ﻿using Booking_App.Server.Models;
+using Booking_App.Server.DTO;
 using Booking_App.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,15 +24,23 @@ namespace Booking_App.Server.Controllers
             return Ok(orders);
         }
         // GET: api/Orders/2
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(int id)
+        [HttpGet("GetOrderById_{id}")]
+        public async Task<ActionResult> GetOrderById(int id)
         {
             var order = await _orderService.GetOrder(id);
-            return Ok(order);
+            if (order == null) return NotFound();
+            else return Ok(order);
+        }
+
+        [HttpGet("GetUserOrders_{userId}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders(string userId)
+        {
+            var orders = await _orderService.GetUserOrders(userId);
+            return Ok(orders);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> PostOrder([FromBody] Order order)
         {
             if (!ModelState.IsValid)
             {
@@ -40,6 +49,19 @@ namespace Booking_App.Server.Controllers
 
             await _orderService.CreateOrder(order);
             return Created();
+        }
+
+        [HttpPost("GetPrice")]
+        public async Task<IActionResult> GetPrice([FromBody] PriceRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            decimal? price = await _orderService.CalculatePrice(request.RoomId, request.ArrivalDate, request.DepartureDate, request.ChildrenAmount, request.AdultsAmount);
+            if (price == null) return BadRequest();
+            else return Ok(price);
         }
 
         [HttpDelete("{id}")]
@@ -56,6 +78,8 @@ namespace Booking_App.Server.Controllers
             }
 
         }
+
+        
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order order)

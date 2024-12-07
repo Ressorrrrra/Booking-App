@@ -17,11 +17,9 @@ namespace Booking_App.Server
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost:5173")
+                        builder.WithOrigins("https://localhost:5173", "https://localhost:5174")
                                 .AllowAnyHeader()
-                                .AllowAnyMethod();
-                        builder.WithOrigins("https://localhost:5174")
-                                .AllowAnyHeader()
+                                .AllowCredentials()
                                 .AllowAnyMethod();
                     });
             });
@@ -36,6 +34,34 @@ namespace Booking_App.Server
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.CreateDependencies(connectionString);
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Booking-App";
+                options.Cookie.HttpOnly = false;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.LoginPath = "/";
+                options.AccessDeniedPath = "/";
+                options.LogoutPath = "/";
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
 
 
 
@@ -60,6 +86,7 @@ namespace Booking_App.Server
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors();

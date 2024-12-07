@@ -14,7 +14,13 @@ import RecentHotels from './RecentHotelsComponent.vue';
 import HotelList from './HotelListComponent.vue';
 import Navbar from './NavbarComponent.vue';
 import ScrollPanel from 'primevue/scrollpanel';
+import { checkAuth, useUser } from '@/plugins/userStatePlugin';
+import { onMounted } from 'vue';
+
+onMounted(checkAuth)
 </script>
+
+
 
 <style>
 .mainPage {

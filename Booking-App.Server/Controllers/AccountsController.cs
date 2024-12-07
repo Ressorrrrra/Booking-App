@@ -58,7 +58,7 @@ namespace Booking_App.Server.Controllers
                 var result = await _userService.LogIn(request);
                 if (result != null)
                 {
-                    return Ok(new { message = "Выполнен вход", userName = result.UserName, userRole = result.UserRole, id = result.Id });
+                    return Ok(result);
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace Booking_App.Server.Controllers
             }
             else
             {
-                return Ok(new { message = "Сессия активна", userName = user.UserName, userRole = user.UserRole, user.Id });
+                return Ok(user);
             }
 
         }

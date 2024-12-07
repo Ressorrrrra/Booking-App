@@ -17,15 +17,17 @@ namespace Booking_App.Server.Repository
             return await db.Orders.FindAsync(id);
         }
 
-        public async Task<List<Order>> GetOrders()
+        public async Task<List<Order>?> GetOrders()
         {
             return await db.Orders.ToListAsync();
         }
 
-        public async Task CreateOrder(Order Order)
+        public async Task<bool> CreateOrder(Order order)
         {
-            await db.Orders.AddAsync(Order);
+            if (order.PaymentStatus == null) order.PaymentStatus = PaymentStatus.Pending;
+            await db.Orders.AddAsync(order);
             await SaveAsync();
+            return true;
         }
 
         private async Task SaveAsync()
@@ -64,6 +66,11 @@ namespace Booking_App.Server.Repository
         public async Task<List<Order>?> GetUserOrders(string userId)
         {
             return await db.Orders.Where(o => o.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Room?> GetRoomById(int roomId)
+        {
+            return await db.Rooms.FindAsync(roomId);
         }
     }
 }

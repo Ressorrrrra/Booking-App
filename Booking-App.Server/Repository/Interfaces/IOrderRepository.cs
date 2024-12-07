@@ -7,8 +7,9 @@ namespace Booking_App.Server.Repository.Interfaces
         public Task<Order?> GetOrder(int id);
         public Task<List<Order>?> GetOrders();
         public Task<List<Order>?> GetUserOrders(string userId);
+        public Task<Room?> GetRoomById(int roomId);
         public Task<bool> DeleteOrder(int id);
         public Task<bool> UpdateOrder(Order order, int id);
-        public Task CreateOrder(Order order);
+        public Task<bool> CreateOrder(Order order);
     }
 }

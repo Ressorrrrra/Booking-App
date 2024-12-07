@@ -113,10 +113,6 @@ async function onFormSubmit(form) {
         minPrice: form.states.minPrice.value,
         maxPrice: form.states.maxPrice.value
     };
-
-    console.log('Критерии поиска обновлены:', searchRequest);
-
-
 }
 
 </script>
