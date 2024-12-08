@@ -1,36 +1,39 @@
 <template>
-    <Form class="bookingInfo" v-if="hotel" @submit="bookRoom">
+    <Form v-slot="$form" class="bookingInfo" v-if="hotel" @submit="bookRoom">
         <div class="hotelInfo">
             <Image :src="hotel.pictureLinks[0]" preview width="256" />
             <div class="info">
                 <p class="name">{{ hotel.name }}</p>
                 <p class="location"> {{ hotel.country }}, {{ hotel.city }} </p>
-                <Button label="Забронировать номер" aut></Button>
+                <Button label="Забронировать номер" aut type="submit"></Button>
             </div>
         </div>
 
         <div class="dates">
             <div class="item">
                 <p class="header">Дата прибытия:</p>
-                <DatePicker showIcon iconDisplay="input" name="arrivalDate" @update:modelValue="GetPrice"></DatePicker>
+                <DatePicker showIcon iconDisplay="input" name="arrivalDate" @value-change="GetPrice($form)">
+                </DatePicker>
             </div>
             <div class="item">
                 <p class="header">Дата отбытия:</p>
-                <DatePicker showIcon iconDisplay="input" name="departureDate" @update:modelValue="GetPrice">
+                <DatePicker showIcon iconDisplay="input" name="departureDate" @value-change="GetPrice($form)">
                 </DatePicker>
             </div>
         </div>
 
-        <div class="residents">
+        <div class=" residents">
             <p class="header">Количество проживающих</p>
             <div class="content">
                 <div class="item">
                     <p class="header">Взрослых:</p>
-                    <AutoComplete name="adultsAmount" dropdown :suggestions="itemsAdults" />
+                    <AutoComplete name="adultsAmount" dropdown :suggestions="itemsAdults"
+                        @value-change="GetPrice($form)" />
                 </div>
                 <div class="item">
                     <p class="header">Детей:</p>
-                    <AutoComplete name="childrenAmount" dropdown :suggestions="itemsChildren" />
+                    <AutoComplete name="childrenAmount" dropdown :suggestions="itemsChildren"
+                        @value-change="GetPrice($form)" />
                 </div>
             </div>
         </div>
@@ -42,13 +45,13 @@
                 <div v-for="room in hotel.rooms" :key="room.id" class="item">
                     <Button class="button" :style="{ backgroundColor: room.id === chosenRoomId ? 'lightgreen' : '' }"
                         :label="room.number.toString()" rounded severity="secondary"
-                        @click="chooseRoom(room.id)"></Button>
+                        @click="chooseRoom(room.id, $form)"></Button>
                 </div>
             </div>
 
         </div>
 
-        <p class="price">{{ totalPrice }}
+        <p class="price">Итого: {{ totalPrice }} ₽
         </p>
 
         <Navbar></Navbar>
@@ -64,7 +67,7 @@ import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
 import { Form } from '@primevue/forms';
 import { useRoute, useRouter } from 'vue-router';
-import { useUser } from '@/plugins/userStatePlugin';
+import { checkAuth } from '@/plugins/userStatePlugin';
 
 const itemsAdults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -72,7 +75,7 @@ const hotel = ref(null);
 const router = useRouter();
 const route = useRoute();
 var chosenRoomId = ref(-1);
-var totalPrice = ref(0);
+var totalPrice = ref(0.0);
 var priceRequest = {
     roomId: -1,
     arrivalDate: Date.now(),
@@ -81,17 +84,30 @@ var priceRequest = {
     adultsAmount: 0,
 }
 
+var request = {
+    userId: "",
+    roomId: -1,
+    arrivalDate: Date.now(),
+    departureDate: Date.now(),
+    childrenAmount: 0,
+    adultsAmount: 0,
+}
+
+var userData = checkAuth()
+
 
 
 async function fetchHotelData() {
-    if (!useUser().value.isAuthorized) goToLogin()
+    const auth = await checkAuth()
+    if (!auth.isAuthorized) goToLogin()
     else {
+        userData = auth
+        console.log(userData)
         try {
             const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
             const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
             if (!response.ok) throw new Error('Ошибка при загрузке данных');
             hotel.value = await response.json();
-            console.log(hotel.value)
         } catch (error) {
             console.error('Ошибка:', error);
         }
@@ -99,17 +115,17 @@ async function fetchHotelData() {
 }
 
 async function GetPrice(form) {
-    console.log(form, "putis")
-    const url = `https://localhost:7273/api/Orders/GetPrice_${chosenRoomId.value}`
+    const url = `https://localhost:7273/api/Orders/GetPrice`
 
-    priceRequest =
-    {
-        roomId: chosenRoomId,
-        arrivalDate: form.states.arrivalDate.value,
-        departureDate: form.states.departureDate.value,
-        childrenAmount: form.states.childrenAmount.value,
-        adultsAmount: form.states.adultsAmount.value,
+
+    priceRequest = {
+        roomId: chosenRoomId.value,
+        arrivalDate: new Date(form.arrivalDate.value).toISOString(),
+        departureDate: new Date(form.departureDate.value).toISOString(),
+        childrenAmount: form.childrenAmount.value,
+        adultsAmount: form.adultsAmount.value,
     }
+
 
     const response = await fetch(url, {
         method: 'POST',
@@ -121,7 +137,8 @@ async function GetPrice(form) {
 
     if (response.ok) {
         const data = await response.json()
-        totalPrice.value = data.totalPrice
+        console.log(data)
+        totalPrice.value = data
     }
 }
 
@@ -131,13 +148,15 @@ async function bookRoom(form) {
 
         request =
         {
-            roomId: chosenRoomId,
-            arrivalDate: form.states.arrivalDate.value,
-            departureDate: form.states.departureDate.value,
+            userId: userData.id,
+            roomId: chosenRoomId.value,
+            arrivalDate: new Date(form.states.arrivalDate.value).toISOString(),
+            departureDate: new Date(form.states.departureDate.value).toISOString(),
             childrenAmount: form.states.childrenAmount.value,
             adultsAmount: form.states.adultsAmount.value,
         }
 
+        console.log(JSON.stringify(request))
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -147,10 +166,10 @@ async function bookRoom(form) {
         });
 
 
-        if (response.status != 404 && response.status != 201) {
+        if (response.status != 404 && response.status != 204) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
-        if (response.status === 201) {
+        if (response.status === 204) {
             goToProfile();
         }
 
@@ -159,9 +178,9 @@ async function bookRoom(form) {
     }
 }
 
-function chooseRoom(roomId) {
+function chooseRoom(roomId, form) {
     chosenRoomId.value = roomId
-
+    GetPrice(form)
     console.log(chosenRoomId)
 }
 
@@ -181,6 +200,7 @@ onMounted(fetchHotelData)
     display: flex;
     flex-direction: column;
     padding: 10px;
+    margin-bottom: 50px;
 }
 
 .bookingInfo .hotelInfo {

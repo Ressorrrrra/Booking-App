@@ -3,44 +3,15 @@
         <div class="profileInfo">
             <Image src="https://wallpapers.com/images/hd/placeholder-profile-icon-20tehfawxt5eihco.jpg" width="128" />
             <div class="userData">
-                <p>Александр Маслаев</p>
-                <p>Эл. почта: maslayev@mail.ru</p>
-                <p>Номер телефона: +7 (800) 5555525</p>
+                <p>Эл. почта: {{ userData.userName }}</p>
             </div>
+
+            <Button label="Выйти из аккаунта" @click="logOut"></Button>
         </div>
 
         <p>Ваши бронирования:</p>
         <ScrollPanel class="bookingHistory">
-            <div class="item">
-                <Image
-                    src="https://lh3.googleusercontent.com/p/AF1QipO2-6qABWRwxzyj7WtM_s2aFmRYtZodpw5DVBiC=s1360-w1360-h1020"
-                    width="190" />
-
-                <div class="info">
-                    <p>Axel Hotel & Hostel</p>
-                    <p>19.10.2024 - 23.10.2024</p>
-                    <p>Статус: ожидает оплаты</p>
-                    <Button type="bookingInfo" severity="secondary" label="Информация о заказе"
-                        @click="goToBookingInfo">
-
-                    </Button>
-                </div>
-            </div>
-
-            <div class="item">
-                <Image
-                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/c1/34/9d/valo-hotel-city.jpg?w=700&h=-1&s=1"
-                    width="190" />
-
-                <div class="info">
-                    <p>Valo</p>
-                    <p>04.11.2024 - 12.11.2024</p>
-                    <p>Статус: оплачено</p>
-                    <Button type="bookingInfo" severity="secondary" label="Информация о заказе">
-
-                    </Button>
-                </div>
-            </div>
+            <BookingHistoryComponent></BookingHistoryComponent>
         </ScrollPanel>
         <Navbar></Navbar>
     </div>
@@ -49,17 +20,62 @@
 </template>
 
 <script setup>
+import BookingHistoryComponent from './BookingHistoryComponent.vue';
+import { ref } from 'vue';
 import { Image } from 'primevue';
 import Button from 'primevue/button';
 import Navbar from './NavbarComponent.vue';
 import ScrollPanel from 'primevue/scrollpanel';
 import { useRouter } from 'vue-router';
+import { checkAuth } from '@/plugins/userStatePlugin';
+import { onMounted } from 'vue';
 
 const router = useRouter();
+var userData = ref(checkAuth())
 
-function goToBookingInfo() {
-    router.push({ name: 'bookinginfo' })
+
+
+async function logOut() {
+    try {
+        const url = `https://localhost:7273/api/Accounts/logoff`;
+
+        const response = await fetch(url, {
+            credentials: "include",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (response.ok) {
+            goToLogin()
+        }
+        else if (response.status === 401) {
+            throw new Error('Ошибка при попытке авторизации');
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
 }
+
+async function _checkAuth() {
+    const auth = await checkAuth()
+    if (!auth.isAuthorized) {
+
+        goToLogin()
+    }
+    else {
+        userData.value = auth;
+    }
+}
+
+function goToLogin() {
+    router.push({ name: 'login' })
+}
+
+
+onMounted(_checkAuth)
+
 </script>
 
 <style>

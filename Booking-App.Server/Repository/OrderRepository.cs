@@ -14,7 +14,7 @@ namespace Booking_App.Server.Repository
         }
         public async Task<Order?> GetOrder(int id)
         {
-            return await db.Orders.FindAsync(id);
+            return await db.Orders.Include(o => o.Room.Hotel).FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task<List<Order>?> GetOrders()
@@ -22,12 +22,11 @@ namespace Booking_App.Server.Repository
             return await db.Orders.ToListAsync();
         }
 
-        public async Task<bool> CreateOrder(Order order)
+        public async Task CreateOrder(Order order)
         {
             if (order.PaymentStatus == null) order.PaymentStatus = PaymentStatus.Pending;
-            await db.Orders.AddAsync(order);
+            db.Orders.Add(order);
             await SaveAsync();
-            return true;
         }
 
         private async Task SaveAsync()
@@ -65,12 +64,24 @@ namespace Booking_App.Server.Repository
 
         public async Task<List<Order>?> GetUserOrders(string userId)
         {
-            return await db.Orders.Where(o => o.UserId == userId).ToListAsync();
+            return await db.Orders.Where(o => o.UserId == userId).Include(o => o.Room.Hotel).ToListAsync();
         }
 
         public async Task<Room?> GetRoomById(int roomId)
         {
-            return await db.Rooms.FindAsync(roomId);
+            return await db.Rooms.FirstOrDefaultAsync(r  => r.Id == roomId);
+        }
+
+        public async Task<bool> PayForOrder(int id)
+        {
+            var order = await db.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
+            if (order == null) return false;
+            order.PaymentStatus = PaymentStatus.Completed;
+            db.Orders.Attach(order);
+            db.Entry(order).State = EntityState.Modified;
+
+            await SaveAsync();
+            return true;
         }
     }
 }

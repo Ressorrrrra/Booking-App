@@ -3,7 +3,8 @@ import { inject, ref } from "vue";
 const userState = ref({
   userName: "Гость",
   roles: ["guest"],
-  isAuthorized: false
+  isAuthorized: false,
+  id: ""
 });
 
 export const userStatePlugin = {
@@ -20,6 +21,7 @@ export function onUserLogin(model) {
   userState.value = {
     userName: model.userName,
     roles: model.roles,
+    id: model.id,
     isAuthorized: true
   };
 }
@@ -38,7 +40,13 @@ export async function checkAuth() {
 
     if (response.ok) {
       const data = await response.json();
-      onUserLogin({ userName: data.userName, roles: data.userRole });
+      await onUserLogin({ userName: data.userName, roles: data.userRole });
+      return {
+        userName: data.userName,
+        roles: data.userRole,
+        isAuthorized: true,
+        id: data.id
+      };
     }
   } catch (error) {}
 }

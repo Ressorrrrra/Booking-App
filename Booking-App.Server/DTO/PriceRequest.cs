@@ -2,10 +2,10 @@
 {
     public class PriceRequest
     {
-        public int RoomId;
-        public DateTime ArrivalDate;
-        public DateTime DepartureDate;
-        public int ChildrenAmount;
-        public int AdultsAmount;
+        public int RoomId { get; set; }
+        public DateTime ArrivalDate { get; set; }
+        public DateTime DepartureDate { get; set; }
+        public int ChildrenAmount { get; set; }
+        public int AdultsAmount { get; set; }
     }
 }

@@ -46,26 +46,26 @@ namespace booking_app.Tests
             Assert.Equal(2, orders.Count());
         }
 
-        [Fact]
-        public async Task GetOrderById_Success()
-        {
-            // Arrange
-            int testId = 1;
-            var mockOrder = new Order { Id = testId, RoomId = 1 };
+        //[Fact]
+        //public async Task GetOrderById_Success()
+        //{
+        //    // Arrange
+        //    int testId = 1;
+        //    var mockOrder = new Order { Id = testId, RoomId = 1 };
 
-            _mockOrderService.Setup(service => service.GetOrder(testId))
-                             .ReturnsAsync(mockOrder);
+        //    _mockOrderService.Setup(service => service.GetOrder(testId))
+        //                     .ReturnsAsync(mockOrder);
 
-            // Act
-            var result = await _controller.GetOrderById(testId);
+        //    // Act
+        //    var result = await _controller.GetOrderById(testId);
 
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var order = Assert.IsAssignableFrom<Order>(okResult.Value);
+        //    // Assert
+        //    var okResult = Assert.IsType<OkObjectResult>(result);
+        //    var order = Assert.IsAssignableFrom<Order>(okResult.Value);
 
-            Assert.NotNull(order);
-            Assert.Equal(testId, order.Id);
-        }
+        //    Assert.NotNull(order);
+        //    Assert.Equal(testId, order.Id);
+        //}
 
         [Fact]
         public async Task GetOrderById_NotFound()

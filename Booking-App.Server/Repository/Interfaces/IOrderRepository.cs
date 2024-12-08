@@ -10,6 +10,7 @@ namespace Booking_App.Server.Repository.Interfaces
         public Task<Room?> GetRoomById(int roomId);
         public Task<bool> DeleteOrder(int id);
         public Task<bool> UpdateOrder(Order order, int id);
-        public Task<bool> CreateOrder(Order order);
+        public Task CreateOrder(Order order);
+        public Task<bool> PayForOrder(int id);
     }
 }

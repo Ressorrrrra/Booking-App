@@ -1,39 +1,25 @@
 <template>
-    <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="form">
+    <Form :initialValues="initialValues" :resolver @submit="onFormSubmit" class="form">
         <p class="header">Регистрация</p>
         <div class="div">
             <IftaLabel class="field">
-                <InputText name="email" type="text" placeholder="ivanov@mail.com" fluid />
+                <InputText name="email" type="text" placeholder="ivanov@mail.com" fluid :invalid="failedReg" />
                 <label for="email">Эл. почта: </label>
             </IftaLabel>
 
             <IftaLabel class="field">
-                <Password name="password" :feedback="false" fluid />
+                <Password name="password" :feedback="false" :invalid="failedReg" fluid />
                 <label for="password">Пароль: </label>
             </IftaLabel>
 
             <IftaLabel class="field">
-                <Password name="confirm_password" :feedback="false" fluid />
+                <Password name="confirmPassword" :feedback="false" fluid :invalid="failedReg" />
                 <label for="confirm_password">Подтвердите пароль: </label>
             </IftaLabel>
 
-            <IftaLabel class="field">
-                <InputText name="name" type="text" placeholder="Иван" fluid />
-                <label for="name">Имя: </label>
-            </IftaLabel>
-
-            <IftaLabel class="field">
-                <InputText name="surname" type="text" placeholder="Иванов" fluid />
-                <label for="surname">Фамилия: </label>
-            </IftaLabel>
-
-            <IftaLabel class="field">
-                <DatePicker name="dateOfBirth" />
-                <label for="dateOfBirth">Дата рождения: </label>
-            </IftaLabel>
-
         </div>
-        <Button label="Зарегистрироваться"></Button>
+        <Message v-if="failedReg">{{ errorMessage }}</Message>
+        <Button label="Зарегистрироваться" type="submit"></Button>
     </Form>
 
 </template>
@@ -49,19 +35,74 @@ export default {
 </script>
 
 <script setup>
+import { ref } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import IftaLabel from 'primevue/iftalabel';
-import DatePicker from 'primevue/datepicker';
+import { Message } from 'primevue';
 import Password from 'primevue/password';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-function onFormSubmit(values) {
-    console.log('Form submitted with:', values);
-    router.push({ name: 'profile' });
+var failedReg = ref(false);
+
+var regRequest = {
+    email: "",
+    password: ""
+}
+
+const initialValues = {
+    email: "",
+    password: "",
+    confirmPassword: ""
+}
+
+var errorMessage = ref("");
+
+async function onFormSubmit(form) {
+    if (form.states.password.value != form.states.confirmPassword.value) {
+        failedReg.value = true;
+        errorMessage.value = "Пароли не совпадают"
+    }
+    else if (form.states.password.value === "" || form.states.email.value === "" || form.states.confirmPassword.value === "") {
+        failedReg.value = true;
+        errorMessage.value = "Пожалуйста, заполните все поля"
+    }
+    else {
+        try {
+            const url = `https://localhost:7273/api/Accounts/register`;
+
+            regRequest = {
+                email: form.states.email.value,
+                password: form.states.password.value
+            }
+
+            const response = await fetch(url, {
+                method: 'POST', // Метод POST для поиска, GET для всех
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(regRequest)
+            });
+
+            if (response.ok) {
+                goToLogin();
+            }
+            else if (response.status === 401) {
+                failedReg.value = true;
+                errorMessage.value = "Не уудалось зарегистрироваться"
+            }
+            else throw new Error('Ошибка при попытке авторизации');
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+}
+
+function goToLogin() {
+    router.push({ name: 'login' });
 }
 </script>
 

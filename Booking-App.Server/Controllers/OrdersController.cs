@@ -16,6 +16,8 @@ namespace Booking_App.Server.Controllers
             _orderService = orderService;
         }
 
+
+
         // GET: Order
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> Get()
@@ -32,6 +34,14 @@ namespace Booking_App.Server.Controllers
             else return Ok(order);
         }
 
+        [HttpGet("PayForOrder_{id}")]
+        public async Task<ActionResult> PayForOrder(int id)
+        {
+            var result = await _orderService.PayForOrder(id);
+            if (!result) return NotFound();
+            else return Ok();
+        }
+
         [HttpGet("GetUserOrders_{userId}")]
         public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders(string userId)
         {
@@ -40,19 +50,26 @@ namespace Booking_App.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder([FromBody] Order order)
+        public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _orderService.CreateOrder(order);
+            try
+            {
+                await _orderService.CreateOrder(order);
+            }
+            catch
+            {
+                BadRequest();
+            }
             return Created();
         }
 
         [HttpPost("GetPrice")]
-        public async Task<IActionResult> GetPrice([FromBody] PriceRequest request)
+        public async Task<ActionResult<decimal>> GetPrice(PriceRequest request)
         {
             if (!ModelState.IsValid)
             {

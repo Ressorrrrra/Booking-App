@@ -1,6 +1,6 @@
 <template>
-    <Form v-slot="$form" :initialValues="initialValues" :validateOnSubmit="true" :validateOnValueUpdate="false"
-        :validateOnBlur="true" @submit="onFormSubmit" class="form">
+    <Form :initialValues="initialValues" :validateOnSubmit="true" :validateOnValueUpdate="false" :validateOnBlur="true"
+        @submit="onFormSubmit" class="form">
         <p class="headerForm">Авторизация</p>
         <div class="div">
             <FormField v-slot="$fieldEmail" :resolver="zodUserNameResolver" initialValue="">
@@ -48,7 +48,7 @@ import Password from 'primevue/password';
 import IftaLabel from 'primevue/iftalabel';
 import { useRouter } from 'vue-router';
 import { Message } from 'primevue';
-import { checkAuth, onUserLogin, useUser } from '@/plugins/userStatePlugin';
+import { checkAuth, onUserLogin } from '@/plugins/userStatePlugin';
 
 var failedLogin = ref(false);
 var errorMessage = ref("");
@@ -73,6 +73,7 @@ async function onFormSubmit(form) {
         const url = `https://localhost:7273/api/Accounts/login`;
 
         const response = await fetch(url, {
+            credentials: "include",
             method: 'POST', // Метод POST для поиска, GET для всех
             headers: {
                 'Content-Type': 'application/json'
@@ -107,11 +108,14 @@ function goToRegistration() {
     router.push({ name: 'registration' });
 }
 
-function _checkAuth() {
-    checkAuth()
-    console.log(useUser().value.isAuthorized)
-    if (useUser().value.isAuthorized) goToMainPage()
+async function _checkAuth() {
+    const auth = await checkAuth()
+    if (auth.isAuthorized) {
+
+        await goToMainPage()
+    }
 }
+
 onMounted(_checkAuth)
 </script>
 
