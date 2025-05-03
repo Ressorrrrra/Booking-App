@@ -86,7 +86,7 @@ namespace Booking_App.Server.Migrations
                     b.Property<DateTime>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("PaymentStatus")
+                    b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
 
                     b.Property<int>("RoomId")

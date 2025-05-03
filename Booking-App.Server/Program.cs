@@ -1,6 +1,7 @@
 
 using Booking_App.Server.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 namespace Booking_App.Server
 {
@@ -8,8 +9,6 @@ namespace Booking_App.Server
     {
         public static async Task Main(string[] args)
         {
-
-
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddCors(options =>
@@ -17,7 +16,7 @@ namespace Booking_App.Server
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost:5173", "https://localhost:5174")
+                        builder.WithOrigins("http://localhost:5173", "http://localhost:5174","https://localhost:5173", "https://localhost:5174")
                                 .AllowAnyHeader()
                                 .AllowCredentials()
                                 .AllowAnyMethod();
@@ -45,8 +44,9 @@ namespace Booking_App.Server
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "Booking-App";
-                options.Cookie.HttpOnly = false;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.LoginPath = "/";
                 options.AccessDeniedPath = "/";
                 options.LogoutPath = "/";
@@ -94,7 +94,6 @@ namespace Booking_App.Server
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
-
             app.Run();
         }
     }

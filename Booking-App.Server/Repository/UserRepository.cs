@@ -34,14 +34,11 @@ namespace Booking_App.Server.Repository
             if (result.Succeeded)
             {
                 return await _userManager.FindByEmailAsync(request.Email);
-
             }
 
             return null;
 
         }
-
-
 
         public async Task<bool> LogOff(ClaimsPrincipal userData)
         {

@@ -1,5 +1,5 @@
 <template>
-    <Form v-slot="$form" :initialValues="initialValues" @submit="onFormSubmit" class="form">
+    <Form :initialValues="initialValues" @submit="onFormSubmit" class="form">
         <div class="div">
             <IconField>
                 <InputText name="name" type="text" placeholder="Поиск" fluid icon @keyup.enter="requestSubmit" />

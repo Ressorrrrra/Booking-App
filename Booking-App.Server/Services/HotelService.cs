@@ -35,7 +35,7 @@ namespace Booking_App.Server.Services
             return await _hotelRepository.GetHotels();
         }
 
-        public async Task<List<HotelShortDTO>?> GetHotelsDTO()
+        public async Task<List<HotelShortDto>?> GetHotelsDTO()
         {
             var hotels = await _hotelRepository.GetHotels();
 
@@ -43,7 +43,7 @@ namespace Booking_App.Server.Services
                 return null;
 
             var hotelDtos = hotels
-                .Select(hotel => new HotelShortDTO
+                .Select(hotel => new HotelShortDto
                 {
                     Id = hotel.Id,
                     Name = hotel.Name,
@@ -60,7 +60,7 @@ namespace Booking_App.Server.Services
             return hotelDtos;
         }
 
-        public async Task<List<HotelShortDTO>?> SearchHotels(HotelSearchRequest request)
+        public async Task<List<HotelShortDto>?> SearchHotels(HotelSearchRequest request)
         {
             var hotels = await _hotelRepository.SearchHotels(request);
 
@@ -68,7 +68,7 @@ namespace Booking_App.Server.Services
                 return null;
 
             var hotelDtos = hotels
-                .Select(hotel => new HotelShortDTO
+                .Select(hotel => new HotelShortDto
                 {
                     Id = hotel.Id,
                     Name = hotel.Name,

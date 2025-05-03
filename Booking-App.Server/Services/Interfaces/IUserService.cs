@@ -8,9 +8,9 @@ namespace Booking_App.Server.Services.Interfaces
     public interface IUserService
     {
         public Task<IdentityResult> Register(RegistrationRequest request);
-        public Task<UserDataDTO?> LogIn(LogInRequest request);
+        public Task<UserDataDto?> LogIn(LogInRequest request);
         public Task<bool> LogOff(ClaimsPrincipal userData);
 
-        public Task<UserDataDTO?> IsAuthenticated(ClaimsPrincipal userData);
+        public Task<UserDataDto?> IsAuthenticated(ClaimsPrincipal userData);
     }
 }

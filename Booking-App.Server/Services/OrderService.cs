@@ -46,14 +46,14 @@ namespace Booking_App.Server.Services
             return await _OrderRepository.DeleteOrder(id);
         }
 
-        public async Task<OrderDTO?> GetOrder(int id)
+        public async Task<OrderDto?> GetOrder(int id)
         {
             var order = await _OrderRepository.GetOrder(id);
             if (order == null) return null;
 
-            var orderDto = new OrderDTO
+            var orderDto = new OrderDto
             {
-                Hotel = new HotelShortDTO
+                Hotel = new HotelShortDto
                 {
                     Id = order.Room.Hotel.Id,
                     Name = order.Room.Hotel.Name,
@@ -64,7 +64,7 @@ namespace Booking_App.Server.Services
                 Id = order.Id,
                 RoomId = order.RoomId,
                 UserId = order.UserId,
-                PaymentStatus = order.PaymentStatus,
+                PaymentStatus = order.OrderStatus,
                 AdultsAmount = order.AdultsAmount,
                 ChildrenAmount = order.ChildrenAmount,
                 ArrivalDate = order.ArrivalDate,
@@ -81,15 +81,15 @@ namespace Booking_App.Server.Services
             return await _OrderRepository.GetOrders();
         }
 
-        public async Task<List<OrderDTO>?> GetUserOrders(string userId)
+        public async Task<List<OrderDto>?> GetUserOrders(string userId)
         {
             var orders = await _OrderRepository.GetUserOrders(userId);
 
             var orderDtos = orders
                 .Select(
-                order => new OrderDTO
+                order => new OrderDto
                 {
-                    Hotel = new HotelShortDTO
+                    Hotel = new HotelShortDto
                     {
                         Id = order.Room.Hotel.Id,
                         Name = order.Room.Hotel.Name,
@@ -100,7 +100,7 @@ namespace Booking_App.Server.Services
                     Id = order.Id,
                     RoomId = order.RoomId,
                     UserId = order.UserId,
-                    PaymentStatus = order.PaymentStatus,
+                    PaymentStatus = order.OrderStatus,
                     AdultsAmount = order.AdultsAmount,
                     ChildrenAmount = order.ChildrenAmount,
                     ArrivalDate = order.ArrivalDate,

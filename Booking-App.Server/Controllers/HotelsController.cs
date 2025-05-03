@@ -33,7 +33,7 @@ namespace Booking_App.Server.Controllers
         }
 
         [HttpGet("GetHotelsDTO")]
-        public async Task<ActionResult<IEnumerable<HotelShortDTO>>> GetDto()
+        public async Task<ActionResult<IEnumerable<HotelShortDto>>> GetDto()
         {
             var hotels = await _hotelService.GetHotelsDTO();
             return Ok(hotels);
@@ -60,7 +60,7 @@ namespace Booking_App.Server.Controllers
         }
         
         [HttpPost("SearchHotels")]
-        public async Task<ActionResult<List<HotelShortDTO>>> SearchHotels([FromBody] HotelSearchRequest request)
+        public async Task<ActionResult<List<HotelShortDto>>> SearchHotels([FromBody] HotelSearchRequest request)
         {
             if (!ModelState.IsValid)
             {

@@ -9,6 +9,7 @@ namespace Booking_App.Server.Models
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
 
         public BookingContext(DbContextOptions<BookingContext> options) : base(options)
         {

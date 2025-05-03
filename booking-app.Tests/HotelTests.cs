@@ -147,10 +147,10 @@ namespace booking_app.Tests
         public async Task GetDto_Success()
         {
             // Arrange
-            var mockHotels = new List<HotelShortDTO>
+            var mockHotels = new List<HotelShortDto>
             {
-                new HotelShortDTO { Id = 1, Name = "Hotel A" },
-                new HotelShortDTO { Id = 2, Name = "Hotel B" }
+                new HotelShortDto { Id = 1, Name = "Hotel A" },
+                new HotelShortDto { Id = 2, Name = "Hotel B" }
             };
 
             hotelServiceMock.Setup(service => service.GetHotelsDTO())
@@ -161,7 +161,7 @@ namespace booking_app.Tests
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var hotels = Assert.IsAssignableFrom<IEnumerable<HotelShortDTO>>(okResult.Value);
+            var hotels = Assert.IsAssignableFrom<IEnumerable<HotelShortDto>>(okResult.Value);
 
             Assert.NotNull(hotels);
             Assert.Equal(2, hotels.Count());
@@ -172,10 +172,10 @@ namespace booking_app.Tests
         {
             // Arrange
             var searchRequest = new HotelSearchRequest { City = "CityA" };
-            var matchingHotels = new List<HotelShortDTO>
+            var matchingHotels = new List<HotelShortDto>
             {
-                new HotelShortDTO { Id = 3, Name = "Hotel C" },
-                new HotelShortDTO { Id = 4, Name = "Hotel D" }
+                new HotelShortDto { Id = 3, Name = "Hotel C" },
+                new HotelShortDto { Id = 4, Name = "Hotel D" }
             };
 
             hotelServiceMock.Setup(service => service.SearchHotels(searchRequest))
@@ -186,7 +186,7 @@ namespace booking_app.Tests
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var hotels = Assert.IsAssignableFrom<List<HotelShortDTO>>(okResult.Value);
+            var hotels = Assert.IsAssignableFrom<List<HotelShortDto>>(okResult.Value);
 
             Assert.NotNull(hotels);
             Assert.Equal(2, hotels.Count());

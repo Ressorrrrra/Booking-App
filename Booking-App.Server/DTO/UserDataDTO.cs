@@ -1,6 +1,6 @@
 ﻿namespace Booking_App.Server.DTO
 {
-    public class UserDataDTO
+    public class UserDataDto
     {
         public string UserName { get; set; }
         public string UserRole { get; set; }

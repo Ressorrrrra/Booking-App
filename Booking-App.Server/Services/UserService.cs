@@ -16,7 +16,7 @@ namespace Booking_App.Server.Services
             _userRepository = userRepository;
         }
 
-        public async Task<UserDataDTO?> IsAuthenticated(ClaimsPrincipal userData)
+        public async Task<UserDataDto?> IsAuthenticated(ClaimsPrincipal userData)
         {
             User user = await _userRepository.IsAuthenticated(userData);
             if (user == null)
@@ -24,7 +24,7 @@ namespace Booking_App.Server.Services
                 return null;
             }
 
-            return new UserDataDTO { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
+            return new UserDataDto { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
         }
 
         private async Task<string?> GetRole(User user)
@@ -33,7 +33,7 @@ namespace Booking_App.Server.Services
             return roles.FirstOrDefault();
         }
 
-        public async Task<UserDataDTO?> LogIn(LogInRequest request)
+        public async Task<UserDataDto?> LogIn(LogInRequest request)
         {
             var user = await _userRepository.LogIn(request);
             if (user == null) 
@@ -41,7 +41,7 @@ namespace Booking_App.Server.Services
                 return null;
             }
 
-            return new UserDataDTO { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
+            return new UserDataDto { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
         }
 
         public Task<bool> LogOff(ClaimsPrincipal userData)

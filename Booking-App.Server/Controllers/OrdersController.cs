@@ -2,6 +2,7 @@
 using Booking_App.Server.DTO;
 using Booking_App.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Booking_App.Server.Controllers
 {
@@ -42,6 +43,7 @@ namespace Booking_App.Server.Controllers
             else return Ok();
         }
 
+        //[Authorize(Roles ="user")]
         [HttpGet("GetUserOrders_{userId}")]
         public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders(string userId)
         {
@@ -49,6 +51,7 @@ namespace Booking_App.Server.Controllers
             return Ok(orders);
         }
 
+        //[Authorize]
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {

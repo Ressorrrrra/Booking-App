@@ -10,13 +10,24 @@
                 <div class="info">
                     <p class="hotelName">{{ order.hotel.name }}</p>
                     <p>{{ formatDate(order.arrivalDate) }} - {{ formatDate(order.departureDate) }}</p>
-                    <p> {{ order.PaymentStatus }}</p>
+                    <p> {{ order.OrderStatus }}</p>
                     <Button type="bookingInfo" severity="secondary" label="Информация о заказе"
                         @click="goToBookingInfo(order.id)">
-
                     </Button>
+                    <Button label="Оставить отзыв" @click="openModal(order)" />
                 </div>
             </div>
+
+            <Dialog v-model:visible="displayModal" :style="{ width: '500px' }" header="Оставить отзыв" :modal="true">
+
+                <ReviewModal :order="selectedOrder" />
+
+                <template #footer>
+                    <Button label="Отмена" icon="pi pi-times" @click="closeModal" class="p-button-text" />
+                    <Button label="Отправить" icon="pi pi-check" @click="submitReview" :disabled="!isFormValid" />
+                </template>
+
+            </Dialog>
         </div>
     </div>
 </template>
@@ -27,10 +38,15 @@ import { Button } from 'primevue';
 import { useRouter } from 'vue-router';
 import Image from 'primevue/image';
 import { checkAuth } from '@/plugins/userStatePlugin';
+import ReviewModal from './ReviewModalComponent.vue';
 
 
+const selectedOrder = ref({ /* данные брониы*/ });
 
-const orders = ref([]); // Состояние для хранения списка отелей
+const isVisible = ref(false);
+const reviewForm = ref(null);
+
+const orders = ref([]); // Состояние для хранения списка бронирований
 const router = useRouter();
 var userData = checkAuth()
 
@@ -42,7 +58,7 @@ async function fetchOrders() {
         userData = auth
         try {
             const url = `https://localhost:7273/api/Orders/GetUserOrders_${userData.id}`
-            console.log(url)
+
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -74,6 +90,30 @@ function goToLogin() {
     router.push({ name: 'login' });
 }
 
+const openModal = async (order) => {
+    // Загрузка данных (пример)
+    selectedOrder.value = order
+    isVisible.value = true;
+};
+
+const closeModal = () => {
+    isVisible.value = false;
+};
+
+const submitReview = async () => {
+    if (!reviewForm.value) return;
+
+    const formData = {
+        ...reviewForm.value.form,
+    };
+
+    await fetch('/api/Orders', {
+        method: 'POST',
+        body: formData
+    });
+
+    closeModal();
+};
 
 
 // Обновление данных при изменении критерия поиска

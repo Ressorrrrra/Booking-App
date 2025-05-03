@@ -57,7 +57,7 @@ namespace booking_app.Tests
         {
             // Arrange
             var loginRequest = new LogInRequest() { Email = "test_user", Password = "password123" };
-            var expectedResponse = new UserDataDTO() { Id = "string", UserName = "test_user", UserRole = "Admin" };
+            var expectedResponse = new UserDataDto() { Id = "string", UserName = "test_user", UserRole = "Admin" };
 
             userServiceMock.Setup(service => service.LogIn(loginRequest)).ReturnsAsync(expectedResponse);
 
@@ -66,7 +66,7 @@ namespace booking_app.Tests
 
             // Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
-            UserDataDTO responseValue = Assert.IsAssignableFrom<UserDataDTO>(okObjectResult.Value);
+            UserDataDto responseValue = Assert.IsAssignableFrom<UserDataDto>(okObjectResult.Value);
             //Assert.Equal("Выполнен вход", ((dynamic)responseValue).message);
 
             Assert.Equal(expectedResponse.UserName, responseValue.UserName);
@@ -95,7 +95,7 @@ namespace booking_app.Tests
             // Arrange
             var loginRequest = new LogInRequest() { Email = "test_user", Password = "wrong_password" };
 
-            userServiceMock.Setup(service => service.LogIn(loginRequest)).ReturnsAsync((UserDataDTO?)null);
+            userServiceMock.Setup(service => service.LogIn(loginRequest)).ReturnsAsync((UserDataDto?)null);
 
             // Act
             var result = await controller.Login(loginRequest);

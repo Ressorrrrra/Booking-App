@@ -90,11 +90,11 @@ async function onFormSubmit(form) {
             if (response.ok) {
                 goToLogin();
             }
-            else if (response.status === 401) {
+            else {
                 failedReg.value = true;
-                errorMessage.value = "Не уудалось зарегистрироваться"
+                errorMessage.value = "Не удалось зарегистрироватьcя."
+                throw new Error('Ошибка при попытке авторизации');
             }
-            else throw new Error('Ошибка при попытке авторизации');
         } catch (error) {
             console.error('Ошибка:', error);
         }

@@ -40,6 +40,8 @@ export async function checkAuth() {
 
     if (response.ok) {
       const data = await response.json();
+
+      console.log(data);
       await onUserLogin({ userName: data.userName, roles: data.userRole });
       return {
         userName: data.userName,
@@ -48,5 +50,7 @@ export async function checkAuth() {
         id: data.id
       };
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }

@@ -23,9 +23,11 @@ namespace Booking_App.Server
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IOrderRepository, OrderRepository>()
                 .AddScoped<IOrderService, OrderService>()
+                .AddScoped<IReviewService, ReviewService>()
+                .AddScoped<IReviewRepository, ReviewRepository>()
                 .AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<BookingContext>();
-
+                
 
             return services;
         }

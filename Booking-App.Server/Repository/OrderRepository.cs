@@ -24,7 +24,6 @@ namespace Booking_App.Server.Repository
 
         public async Task CreateOrder(Order order)
         {
-            if (order.PaymentStatus == null) order.PaymentStatus = PaymentStatus.Pending;
             db.Orders.Add(order);
             await SaveAsync();
         }
@@ -76,7 +75,7 @@ namespace Booking_App.Server.Repository
         {
             var order = await db.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) return false;
-            order.PaymentStatus = PaymentStatus.Completed;
+            order.OrderStatus = OrderStatus.Paid;
             db.Orders.Attach(order);
             db.Entry(order).State = EntityState.Modified;
 

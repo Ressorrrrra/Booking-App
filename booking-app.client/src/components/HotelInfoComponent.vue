@@ -24,6 +24,7 @@
                 <Image v-for="(picture, index) in hotel.pictureLinks" :key="index" :src="picture" preview width="150" />
             </div>
         </div>
+        <Reviews></Reviews>
         <Navbar />
     </div>
 
@@ -39,6 +40,7 @@ import Tag from 'primevue/tag';
 import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
 import { useRouter, useRoute } from 'vue-router';
+import Reviews from './ReviewListComponent.vue'
 
 const router = useRouter();
 const route = useRoute();

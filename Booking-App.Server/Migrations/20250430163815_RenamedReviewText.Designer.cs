@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Booking_App.Server.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20241203211602_rename")]
-    partial class rename
+    [Migration("20250430163815_RenamedReviewText")]
+    partial class RenamedReviewText
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,11 +83,11 @@ namespace Booking_App.Server.Migrations
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("OrderTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("integer");
@@ -106,6 +106,34 @@ namespace Booking_App.Server.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Booking_App.Server.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("PostDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Booking_App.Server.Models.Room", b =>
@@ -348,6 +376,17 @@ namespace Booking_App.Server.Migrations
                     b.Navigation("Room");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Booking_App.Server.Models.Review", b =>
+                {
+                    b.HasOne("Booking_App.Server.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Booking_App.Server.Models.Room", b =>

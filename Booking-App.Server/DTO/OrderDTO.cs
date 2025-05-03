@@ -2,11 +2,11 @@
 
 namespace Booking_App.Server.DTO
 {
-    public class OrderDTO
+    public class OrderDto
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
-        public HotelShortDTO Hotel { get; set; }
+        public HotelShortDto Hotel { get; set; }
         public string UserId { get; set; }
         public decimal TotalPrice { get; set; }
         public int AdultsAmount { get; set; }
@@ -14,6 +14,6 @@ namespace Booking_App.Server.DTO
         public DateTime ArrivalDate { get; set; }
         public DateTime DepartureDate { get; set; }
         public DateTime OrderTime { get; set; }
-        public PaymentStatus? PaymentStatus { get; set; }
+        public OrderStatus? PaymentStatus { get; set; }
     }
 }
