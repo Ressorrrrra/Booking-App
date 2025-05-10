@@ -40,7 +40,8 @@ function goToProfile() {
 <style>
 .navbar {
     width: 105%;
-    margin-top: 20px;
+    height: 10%;
+    margin-top: 100px;
     position: fixed;
     bottom: 0;
     z-index: 100;

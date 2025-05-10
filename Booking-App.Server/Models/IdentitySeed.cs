@@ -18,6 +18,11 @@ namespace Booking_App.Server.Models
                 await roleManager.CreateAsync(new IdentityRole("user"));
             }
 
+            if (await roleManager.FindByNameAsync("hotelRepresentative") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("hotelRepresentative"));
+            }
+
             string adminEmail = "admin@mail.com";
             string adminPassword = "Admin123!";
             if (await userManager.FindByNameAsync(adminEmail) == null)
@@ -39,6 +44,18 @@ namespace Booking_App.Server.Models
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "user");
+                }
+            }
+
+            string representativeEmail = "hotel@mail.com";
+            string representativePassword = "Hotel123!";
+            if (await userManager.FindByNameAsync(representativeEmail) == null)
+            {
+                User representative = new User { Email = representativeEmail, UserName = representativeEmail };
+                IdentityResult result = await userManager.CreateAsync(representative, representativePassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(representative, "hotelRepresentative");
                 }
             }
         }

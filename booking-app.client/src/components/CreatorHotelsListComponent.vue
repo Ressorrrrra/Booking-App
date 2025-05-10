@@ -8,9 +8,9 @@
                 <Image :src="hotel.picture" width="150" height="110" />
                 <div class="info">
                     <p class="hotelName">{{ hotel.name }}</p>
-                    <p class="price">От {{ hotel.price }}₽ за ночь</p>
                     <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
-                    <Button label="Забронировать номер" @click="goToHotelInfo(hotel.id)" />
+                    <Button label="Изменить информацию об отеле" @click="goToHotelInfo(hotel.id)" />
+                    <Button label="Управление номерами" @click="goToHotelInfo(hotel.id)" />
                 </div>
             </div>
         </div>
@@ -38,13 +38,12 @@ const globalVar = inject('globalVar')
 // Функция для получения данных с сервера
 async function fetchHotels(searchCriteria) {
     try {
-        const url = searchCriteria ? `${globalVar.apiUrl}/Hotels/SearchHotels` :
-            `${globalVar.apiUrl}/Hotels/GetHotelsDTO`;
-
+        const url =  `${globalVar.apiUrl}/Hotels/GetHotelsByCreatorId`
 
         const response = await fetch(url, {
-            method: searchCriteria ? 'POST' : 'GET', // Метод POST для поиска, GET для всех
+            method: 'GET', 
             headers: {
+                credentials: "include",
                 'Content-Type': 'application/json'
             },
             body: searchCriteria ? JSON.stringify(searchCriteria) : null

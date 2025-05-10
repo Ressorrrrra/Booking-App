@@ -35,7 +35,7 @@ export default {
 </script>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -45,6 +45,7 @@ import Password from 'primevue/password';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const globalVar = inject('globalVar')
 
 var failedReg = ref(false);
 

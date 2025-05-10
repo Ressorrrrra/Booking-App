@@ -5,35 +5,35 @@
             <div class="info">
                 <p class="name">{{ hotel.name }}</p>
                 <p class="location"> {{ hotel.country }}, {{ hotel.city }} </p>
-                <Button label="Забронировать номер" aut type="submit"></Button>
+                <Button :disabled="!roomSelected" label="Забронировать номер" type="submit"></Button>
             </div>
         </div>
 
         <div class="dates">
             <div class="item">
                 <p class="header">Дата прибытия:</p>
-                <DatePicker showIcon iconDisplay="input" name="arrivalDate" @value-change="GetPrice($form)">
+                <DatePicker showIcon iconDisplay="input" name="arrivalDate" @value-change="GetData($form)">
                 </DatePicker>
             </div>
             <div class="item">
                 <p class="header">Дата отбытия:</p>
-                <DatePicker showIcon iconDisplay="input" name="departureDate" @value-change="GetPrice($form)">
+                <DatePicker showIcon iconDisplay="input" name="departureDate" @value-change="GetData($form)">
                 </DatePicker>
             </div>
         </div>
 
-        <div class=" residents">
+        <div class="residents">
             <p class="header">Количество проживающих</p>
             <div class="content">
                 <div class="item">
                     <p class="header">Взрослых:</p>
                     <AutoComplete name="adultsAmount" dropdown :suggestions="itemsAdults"
-                        @value-change="GetPrice($form)" />
+                        @value-change="GetData($form)" />
                 </div>
                 <div class="item">
                     <p class="header">Детей:</p>
                     <AutoComplete name="childrenAmount" dropdown :suggestions="itemsChildren"
-                        @value-change="GetPrice($form)" />
+                        @value-change="GetData($form)" />
                 </div>
             </div>
         </div>
@@ -41,8 +41,7 @@
         <div class="aviableRooms">
             <p class="header">Доступные номера</p>
             <div class="items">
-
-                <div v-for="room in hotel.rooms" :key="room.id" class="item">
+                <div v-for="room in rooms" :key="room.id" class="item">
                     <Button class="button" :style="{ backgroundColor: room.id === chosenRoomId ? 'lightgreen' : '' }"
                         :label="room.number.toString()" rounded severity="secondary"
                         @click="chooseRoom(room.id, $form)"></Button>
@@ -59,7 +58,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
 import Navbar from './NavbarComponent.vue';
@@ -72,12 +71,22 @@ import { checkAuth } from '@/plugins/userStatePlugin';
 const itemsAdults = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const itemsChildren = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const hotel = ref(null);
+const rooms = ref([]);
 const router = useRouter();
 const route = useRoute();
+const globalVar = inject('globalVar')
+var roomSelected = false;
 var chosenRoomId = ref(-1);
 var totalPrice = ref(0.0);
 var priceRequest = {
     roomId: -1,
+    arrivalDate: Date.now(),
+    departureDate: Date.now(),
+    childrenAmount: 0,
+    adultsAmount: 0,
+}
+
+var roomRequest = {
     arrivalDate: Date.now(),
     departureDate: Date.now(),
     childrenAmount: 0,
@@ -95,17 +104,18 @@ var request = {
 
 var userData = checkAuth()
 
-
+async function GetData(form) {
+    GetPrice(form)
+    GetRooms(form)
+}
 
 async function fetchHotelData() {
     const auth = await checkAuth()
     if (!auth.isAuthorized) goToLogin()
     else {
-        userData = auth
-        console.log(userData)
         try {
             const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
-            const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
+            const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId}`);
             if (!response.ok) throw new Error('Ошибка при загрузке данных');
             hotel.value = await response.json();
         } catch (error) {
@@ -114,18 +124,18 @@ async function fetchHotelData() {
     }
 }
 
-async function GetPrice(form) {
-    const url = `https://localhost:7273/api/Orders/GetPrice`
 
+
+async function GetPrice(form) {
+    const url = `${globalVar.apiUrl}/Orders/GetPrice`
 
     priceRequest = {
         roomId: chosenRoomId.value,
-        arrivalDate: new Date(form.arrivalDate.value).toISOString(),
-        departureDate: new Date(form.departureDate.value).toISOString(),
+        arrivalDate: form.arrivalDate.value,
+        departureDate: form.departureDate.value,
         childrenAmount: form.childrenAmount.value,
         adultsAmount: form.adultsAmount.value,
     }
-
 
     const response = await fetch(url, {
         method: 'POST',
@@ -142,22 +152,51 @@ async function GetPrice(form) {
     }
 }
 
+async function GetRooms(form) {
+    const hotelId = route.params.id
+
+    const roomsUrl = `${globalVar.apiUrl}/Hotels/${hotelId}/GetRooms`
+
+    roomRequest = {
+        arrivalDate: form.arrivalDate.value,
+        departureDate: form.departureDate.value,
+        childrenAmount: form.childrenAmount.value,
+        adultsAmount: form.adultsAmount.value,
+    }
+
+    const roomsResponse = await fetch(roomsUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(roomRequest)
+    });
+
+    if (roomsResponse.ok) {
+        const roomData = await roomsResponse.json()
+        rooms.value = roomData;
+    }
+
+    console.log(rooms.value)
+}
+
 async function bookRoom(form) {
     try {
-        const url = 'https://localhost:7273/api/Orders';
+        const url = `${globalVar.apiUrl}/Orders`;
 
         request =
         {
             userId: userData.id,
             roomId: chosenRoomId.value,
-            arrivalDate: new Date(form.states.arrivalDate.value).toISOString(),
-            departureDate: new Date(form.states.departureDate.value).toISOString(),
+            arrivalDate: form.states.arrivalDate.value,
+            departureDate: form.states.departureDate.value,
             childrenAmount: form.states.childrenAmount.value,
             adultsAmount: form.states.adultsAmount.value,
         }
 
         console.log(JSON.stringify(request))
         const response = await fetch(url, {
+            credentials: "include",
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -165,6 +204,7 @@ async function bookRoom(form) {
             body: JSON.stringify(request)
         });
 
+        console.log(response)
 
         if (response.status != 404 && response.status != 204) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
@@ -180,12 +220,13 @@ async function bookRoom(form) {
 
 function chooseRoom(roomId, form) {
     chosenRoomId.value = roomId
+    roomSelected = true;
     GetPrice(form)
     console.log(chosenRoomId)
 }
 
 function goToProfile() {
-
+    router.push({ name: 'profile' });
 }
 
 function goToLogin() {

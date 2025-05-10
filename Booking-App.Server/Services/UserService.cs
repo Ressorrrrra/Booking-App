@@ -24,7 +24,7 @@ namespace Booking_App.Server.Services
                 return null;
             }
 
-            return new UserDataDto { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
+            return new UserDataDto { UserId = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
         }
 
         private async Task<string?> GetRole(User user)
@@ -41,7 +41,7 @@ namespace Booking_App.Server.Services
                 return null;
             }
 
-            return new UserDataDto { Id = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
+            return new UserDataDto { UserId = user.Id, UserName = user.UserName, UserRole = await GetRole(user) };
         }
 
         public Task<bool> LogOff(ClaimsPrincipal userData)

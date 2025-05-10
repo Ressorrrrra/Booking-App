@@ -18,4 +18,8 @@ app.use(PrimeVue, {
   }
 });
 
+app.provide("globalVar", {
+  apiUrl: "https://localhost:7273/api"
+});
+
 app.mount("#app");

@@ -39,6 +39,9 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -57,6 +60,8 @@ namespace Booking_App.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("Hotels");
                 });
 
@@ -71,19 +76,19 @@ namespace Booking_App.Server.Migrations
                     b.Property<int>("AdultsAmount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("ArrivalDate")
+                    b.Property<DateTimeOffset>("ArrivalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ChildrenAmount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DepartureDate")
+                    b.Property<DateTimeOffset>("DepartureDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTimeOffset>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RoomId")
@@ -356,6 +361,15 @@ namespace Booking_App.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Booking_App.Server.Models.Hotel", b =>
+                {
+                    b.HasOne("Booking_App.Server.Models.User", "Creator")
+                        .WithMany("Hotels")
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("Booking_App.Server.Models.Order", b =>
                 {
                     b.HasOne("Booking_App.Server.Models.Room", "Room")
@@ -460,6 +474,8 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.User", b =>
                 {
+                    b.Navigation("Hotels");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

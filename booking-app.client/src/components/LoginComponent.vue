@@ -40,7 +40,7 @@ export default {
 </script>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -54,6 +54,7 @@ var failedLogin = ref(false);
 var errorMessage = ref("");
 
 const router = useRouter();
+const globalVar = inject('globalVar')
 
 const loginRequest = {
     userName: "",
@@ -70,11 +71,11 @@ async function onFormSubmit(form) {
     loginRequest.email = form.states.email.value
     loginRequest.password = form.states.password.value
     try {
-        const url = `https://localhost:7273/api/Accounts/login`;
+        const url = `${globalVar.apiUrl}/Accounts/login`;
 
         const response = await fetch(url, {
             credentials: "include",
-            method: 'POST', // Метод POST для поиска, GET для всех
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

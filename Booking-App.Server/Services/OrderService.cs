@@ -15,7 +15,7 @@ namespace Booking_App.Server.Services
             _OrderRepository = OrderRepository;
         }
 
-        public async Task<decimal?> CalculatePrice(int roomId, DateTime arrivalDate, DateTime departureDate, int childrenAmount, int adultsAmount)
+        public async Task<decimal?> CalculatePrice(int roomId, DateTimeOffset arrivalDate, DateTimeOffset departureDate, int childrenAmount, int adultsAmount)
         {
             var room = await _OrderRepository.GetRoomById(roomId);
             if (room == null) return null;
@@ -26,17 +26,27 @@ namespace Booking_App.Server.Services
             return price;
         }
 
-        public async Task<bool> PayForOrder(int id)
+        public async Task<bool> CancelOrder(int id)
         {
-            return await _OrderRepository.PayForOrder(id);
+            return await _OrderRepository.CancelOrder(id);
         }
 
-        public async Task CreateOrder(Order order)           
+        public async Task CreateOrder(CreateOrderRequest _order)           
         {
-            decimal? totalPrice = await CalculatePrice(order.RoomId, order.ArrivalDate, order.DepartureDate, order.ChildrenAmount, order.AdultsAmount);
+            decimal? totalPrice = await CalculatePrice(_order.RoomId, _order.ArrivalDate, _order.DepartureDate, _order.ChildrenAmount, _order.AdultsAmount);
             if (totalPrice == null) return;
-            order.TotalPrice = (decimal)totalPrice;
-            order.OrderTime = DateTime.Now.ToUniversalTime();
+            var order = new Order
+            {
+                AdultsAmount = _order.AdultsAmount,
+                ChildrenAmount = _order.ChildrenAmount,
+                ArrivalDate = _order.ArrivalDate,
+                DepartureDate = _order.DepartureDate,
+                RoomId = _order.RoomId,
+                UserId = _order.UserId,
+                OrderStatus = OrderStatus.Paid,
+                OrderTime = DateTimeOffset.UtcNow,
+                TotalPrice = (decimal)totalPrice,
+            };
             await _OrderRepository.CreateOrder(order);
             
         }
@@ -64,7 +74,7 @@ namespace Booking_App.Server.Services
                 Id = order.Id,
                 RoomId = order.RoomId,
                 UserId = order.UserId,
-                PaymentStatus = order.OrderStatus,
+                OrderStatus = order.OrderStatus,
                 AdultsAmount = order.AdultsAmount,
                 ChildrenAmount = order.ChildrenAmount,
                 ArrivalDate = order.ArrivalDate,
@@ -85,7 +95,7 @@ namespace Booking_App.Server.Services
         {
             var orders = await _OrderRepository.GetUserOrders(userId);
 
-            var orderDtos = orders
+            var orderDtos = orders?
                 .Select(
                 order => new OrderDto
                 {
@@ -100,7 +110,7 @@ namespace Booking_App.Server.Services
                     Id = order.Id,
                     RoomId = order.RoomId,
                     UserId = order.UserId,
-                    PaymentStatus = order.OrderStatus,
+                    OrderStatus = order.OrderStatus,
                     AdultsAmount = order.AdultsAmount,
                     ChildrenAmount = order.ChildrenAmount,
                     ArrivalDate = order.ArrivalDate,
@@ -113,8 +123,21 @@ namespace Booking_App.Server.Services
             return orderDtos;
         }
 
-        public async Task<bool> UpdateOrder(Order order, int id)
+        public async Task<bool> UpdateOrder(CreateOrderRequest request, int id)
         {
+            decimal? totalPrice = await CalculatePrice(request.RoomId, request.ArrivalDate, request.DepartureDate, request.ChildrenAmount, request.AdultsAmount);
+            if (totalPrice == null) return false;
+            var order = new Order
+            {
+                AdultsAmount = request.AdultsAmount,
+                ChildrenAmount = request.ChildrenAmount,
+                ArrivalDate = request.ArrivalDate,
+                DepartureDate = request.DepartureDate,
+                RoomId = request.RoomId,
+                UserId = request.UserId,
+                OrderStatus = request.Status ?? OrderStatus.Paid,
+                TotalPrice = (decimal)totalPrice,
+            };
             return await _OrderRepository.UpdateOrder(order, id);
         }
     }

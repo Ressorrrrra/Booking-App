@@ -21,7 +21,7 @@
 
 <script setup>
 import BookingHistoryComponent from './BookingHistoryComponent.vue';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Image } from 'primevue';
 import Button from 'primevue/button';
 import Navbar from './NavbarComponent.vue';
@@ -31,13 +31,14 @@ import { checkAuth } from '@/plugins/userStatePlugin';
 import { onMounted } from 'vue';
 
 const router = useRouter();
+const globalVar = inject('globalVar')
 var userData = ref(checkAuth())
 
 
 
 async function logOut() {
     try {
-        const url = `https://localhost:7273/api/Accounts/logoff`;
+        const url = `${globalVar.apiUrl}/Accounts/logoff`;
 
         const response = await fetch(url, {
             credentials: "include",
@@ -60,8 +61,8 @@ async function logOut() {
 
 async function _checkAuth() {
     const auth = await checkAuth()
+    console.log(auth)
     if (!auth.isAuthorized) {
-
         goToLogin()
     }
     else {

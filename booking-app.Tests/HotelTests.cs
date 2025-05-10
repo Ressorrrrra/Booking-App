@@ -19,12 +19,18 @@ namespace booking_app.Tests
     public class HotelTests
     {
         private readonly Mock<IHotelService> hotelServiceMock;
+        private readonly Mock<IRoomService> roomServiceMock;
+        private readonly Mock<IReviewService> reviewServiceMock;
+        private readonly Mock<IUserService> userServiceMock;
         private readonly HotelsController controller;
 
         public HotelTests()
         {
             hotelServiceMock = new Mock<IHotelService>();
-            controller = new HotelsController(hotelServiceMock.Object);
+            roomServiceMock = new Mock<IRoomService>();
+            reviewServiceMock = new Mock<IReviewService>();
+            userServiceMock = new Mock<IUserService>();
+            controller = new HotelsController(hotelServiceMock.Object, roomServiceMock.Object, reviewServiceMock.Object, userServiceMock.Object);
         }
 
         [Fact]
@@ -93,7 +99,7 @@ namespace booking_app.Tests
         public async Task PostHotel_Success()
         {
             // Arrange
-            var newHotel = new Hotel { Name = "New Hotel" };
+            var newHotel = new CreateHotelRequest { Name = "New Hotel" };
 
             hotelServiceMock.Setup(service => service.CreateHotel(newHotel));
 
@@ -111,7 +117,7 @@ namespace booking_app.Tests
         {
             // Arrange
             int existingId = 1;
-            var updatedHotel = new Hotel { Id = existingId, Name = "Updated Hotel" };
+            var updatedHotel = new CreateHotelRequest { Name = "Updated Hotel" };
 
             hotelServiceMock.Setup(service => service.UpdateHotel(updatedHotel, existingId))
                              .ReturnsAsync(true);
@@ -131,7 +137,7 @@ namespace booking_app.Tests
         {
             // Arrange
             int nonExistingId = 999;
-            var updatedHotel = new Hotel { Id = nonExistingId, Name = "Non-existing Hotel" };
+            var updatedHotel = new CreateHotelRequest { Name = "Non-existing Hotel" };
 
             hotelServiceMock.Setup(service => service.UpdateHotel(updatedHotel, nonExistingId))
                              .ReturnsAsync(false);

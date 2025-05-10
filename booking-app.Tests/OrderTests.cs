@@ -1,4 +1,5 @@
 ﻿using Booking_App.Server.Controllers;
+using Booking_App.Server.DTO;
 using Booking_App.Server.Models;
 using Booking_App.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,14 @@ namespace booking_app.Tests
     public class OrderTests
     {
         private readonly Mock<IOrderService> _mockOrderService;
+        private readonly Mock<IUserService> _mockUserService;
         private readonly OrdersController _controller;
 
         public OrderTests()
         {
             _mockOrderService = new Mock<IOrderService>();
-            _controller = new OrdersController(_mockOrderService.Object);
+            _mockUserService = new Mock<IUserService>();
+            _controller = new OrdersController(_mockOrderService.Object, _mockUserService.Object);
         }
 
         [Fact]
@@ -87,7 +90,7 @@ namespace booking_app.Tests
         public async Task PostOrder_Success()
         {
             // Arrange
-            var newOrder = new Order { RoomId = 54 };
+            var newOrder = new CreateOrderRequest { RoomId = 54 };
 
             _mockOrderService.Setup(service => service.CreateOrder(newOrder));
 
@@ -105,7 +108,7 @@ namespace booking_app.Tests
         {
             // Arrange
             int existingId = 1;
-            var updatedOrder = new Order { Id = existingId, RoomId = 1 };
+            var updatedOrder = new CreateOrderRequest { RoomId = 1 };
 
             _mockOrderService.Setup(service => service.UpdateOrder(updatedOrder, existingId))
                              .ReturnsAsync(true);
@@ -124,7 +127,7 @@ namespace booking_app.Tests
         {
             // Arrange
             int nonExistingId = 999;
-            var updatedOrder = new Order { Id = nonExistingId, RoomId = 1 };
+            var updatedOrder = new CreateOrderRequest { RoomId = 1 };
 
             _mockOrderService.Setup(service => service.UpdateOrder(updatedOrder, nonExistingId))
                              .ReturnsAsync(false);

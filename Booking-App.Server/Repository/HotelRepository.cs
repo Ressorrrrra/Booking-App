@@ -19,7 +19,6 @@ namespace Booking_App.Server.Repository
         public async Task<Hotel?> GetHotel(int id)
         {
             return await db.Hotels
-                .Include(h => h.Rooms) 
                 .FirstOrDefaultAsync(h => h.Id == id);
         }
 
@@ -31,11 +30,6 @@ namespace Booking_App.Server.Repository
         public async Task CreateHotel(Hotel hotel)
         {
             await db.Hotels.AddAsync(hotel);
-            await SaveAsync();
-        }
-
-        private async Task SaveAsync()
-        {
             await db.SaveChangesAsync();
         }
 
@@ -47,7 +41,7 @@ namespace Booking_App.Server.Repository
                 return false;
             }
             db.Hotels.Remove(hotel);
-            await SaveAsync();
+            await db.SaveChangesAsync();
             return true;
         }
 
@@ -63,7 +57,7 @@ namespace Booking_App.Server.Repository
             db.Hotels.Attach(hotel);
             db.Entry(hotel).State = EntityState.Modified;
 
-            await SaveAsync();
+            await db.SaveChangesAsync();
             return true;
         }
 
@@ -80,18 +74,23 @@ namespace Booking_App.Server.Repository
                 // Проверка, что хотя бы один номер в отеле соответствует ценовому диапазону и доступен по датам
                 hotel.Rooms.Any(room =>
                     // Фильтрация по цене
-                    (request.minPrice == null || room.Price >= request.minPrice) &&
-                    (request.maxPrice == null || room.Price <= request.maxPrice) &&
+                    (request.MinPrice == null || room.Price >= request.MinPrice) &&
+                    (request.MaxPrice == null || room.Price <= request.MaxPrice) &&
                     // Проверка на доступность по датам (если даты заданы)
                     (!request.ArrivalDate.HasValue || !request.DepartureDate.HasValue ||
                      !room.Orders.Any(order =>
                          // Условие, что даты бронирования пересекаются с заданным диапазоном
-                         order.ArrivalDate < request.DepartureDate &&
-                         order.DepartureDate > request.ArrivalDate
+                         order.DepartureDate <= request.ArrivalDate &&
+                         order.ArrivalDate >= request.DepartureDate
                      ))
                 )
             )
             .ToListAsync();
+        }
+
+        public Task<List<Hotel>> GetHotelsByCreatorId()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,13 +16,6 @@ namespace Booking_App.Server.Controllers
             _reviewService = reviewService;
         }
 
-        [HttpGet("/api/Hotels/{hotelId}/reviews")]
-        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReviewsByHotelId(int hotelId)
-        {
-            var reviews = await _reviewService.GetReviewsByHotelId(hotelId);
-            return Ok(reviews);
-        }
-
         [HttpGet("{reviewId}")]
         public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReview(int reviewId)
         {
@@ -32,7 +25,7 @@ namespace Booking_App.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel(CreateReviewRequest review)
+        public async Task<IActionResult> PostReview(CreateReviewRequest review)
         {
             if (!ModelState.IsValid)
             {

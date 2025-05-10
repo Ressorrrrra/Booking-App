@@ -11,6 +11,6 @@ namespace Booking_App.Server.Repository.Interfaces
         public Task<bool> DeleteOrder(int id);
         public Task<bool> UpdateOrder(Order order, int id);
         public Task CreateOrder(Order order);
-        public Task<bool> PayForOrder(int id);
+        public Task<bool> CancelOrder(int id);
     }
 }

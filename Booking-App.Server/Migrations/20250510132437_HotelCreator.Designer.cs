@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Booking_App.Server.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20250430163815_RenamedReviewText")]
-    partial class RenamedReviewText
+    [Migration("20250510132437_HotelCreator")]
+    partial class HotelCreator
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,11 +28,11 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.Hotel", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -40,6 +40,9 @@ namespace Booking_App.Server.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatorId")
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
@@ -58,35 +61,37 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Hotels");
                 });
 
             modelBuilder.Entity("Booking_App.Server.Models.Order", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdultsAmount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("ArrivalDate")
+                    b.Property<DateTimeOffset>("ArrivalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ChildrenAmount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DepartureDate")
+                    b.Property<DateTimeOffset>("DepartureDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTimeOffset>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RoomId")
@@ -99,7 +104,7 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
@@ -110,11 +115,11 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.Review", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
@@ -129,7 +134,7 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
@@ -138,11 +143,11 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.Room", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Capacity")
                         .HasColumnType("integer");
@@ -156,7 +161,7 @@ namespace Booking_App.Server.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("HotelId");
 
@@ -165,7 +170,7 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.User", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
@@ -215,7 +220,7 @@ namespace Booking_App.Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -229,7 +234,7 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -244,7 +249,7 @@ namespace Booking_App.Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -255,11 +260,11 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -271,7 +276,7 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
@@ -280,11 +285,11 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -296,7 +301,7 @@ namespace Booking_App.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -357,6 +362,15 @@ namespace Booking_App.Server.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Booking_App.Server.Models.Hotel", b =>
+                {
+                    b.HasOne("Booking_App.Server.Models.User", "Creator")
+                        .WithMany("Hotels")
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("Booking_App.Server.Models.Order", b =>
@@ -463,6 +477,8 @@ namespace Booking_App.Server.Migrations
 
             modelBuilder.Entity("Booking_App.Server.Models.User", b =>
                 {
+                    b.Navigation("Hotels");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

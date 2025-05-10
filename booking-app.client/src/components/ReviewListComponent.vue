@@ -16,17 +16,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 const reviews = ref([]); // Состояние для хранения списка отелей
 const route = useRoute();
+const globalVar = inject('globalVar')
 
 // Функция для получения данных с сервера
 async function fetchReviews() {
     try {
         const hotelId = route.params.id;
-        const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}/reviews`)
+        const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId}/reviews`)
         if (!response.ok) throw new Error('Ошибка при загрузке данных');
         const data = await response.json();
 

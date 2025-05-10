@@ -5,8 +5,7 @@
             <div class="info">
                 <p> {{ order.hotel.name }}</p>
                 <p>{{ order.hotel.country }}, {{ order.hotel.city }} </p>
-                <Button v-if="order.paymentStatus != 1" label="Оплатить" @click="pay"></Button>
-                <Button label="Отменить бронирование" @click="cancelOrder"></Button>
+                <Button v-if="order.orderStatus != 3" label="Отменить бронь" @click="cancelOrder"></Button>
             </div>
         </div>
 
@@ -15,10 +14,10 @@
             <p>Дата отбытия: {{ formatDate(order.departureDate) }}</p>
             <p>Цена: {{ order.totalPrice }} ₽</p>
             <p>Дата оформления заказа: {{ formatDate(order.orderTime) }}</p>
-            <p>Количество проживающих</p>
+            <p>Количество проживающих:</p>
             <p>Взрослых: {{ order.adultsAmount }}</p>
             <p>Детей: {{ order.childrenAmount }}</p>
-            <p>Статус: {{ PaymentStatusMapper[order.paymentStatus] }}</p>
+            <p>Статус: {{ OrderStatusMapper[order.orderStatus] }}</p>
         </div>
         <Navbar></Navbar>
     </div>
@@ -38,19 +37,20 @@ import router from '@/router';
 import { useRoute } from 'vue-router';
 
 var order = ref(null)
-var userData = checkAuth()
 const route = useRoute();
 
-const PaymentStatusMapper = {
-    0: 'Ожидает оплаты',
-    1: 'Оплачен'
+const OrderStatusMapper = {
+    0: 'Бронь оплачена',
+    1: 'Проживающий заселён',
+    2: 'Проживающий выехал',
+    3: 'Бронь отменена',
+    4: 'Номер закрыт'
 };
 
 async function fetchOrder() {
     const auth = await checkAuth()
     if (!auth.isAuthorized) goToLogin()
     else {
-        userData = auth
         try {
             const orderId = route.params.id;
             const url = `https://localhost:7273/api/Orders/GetOrderById_${orderId}`
@@ -79,31 +79,7 @@ async function fetchOrder() {
 async function cancelOrder() {
     try {
         const orderId = route.params.id;
-        const url = `https://localhost:7273/api/Orders/${orderId}`
-
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-
-        if (response.status != 404 && response.status != 204) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
-        }
-
-        if (response.ok) goToProfile()
-    } catch (error) {
-        console.error('Не удалось удалить бронь:', error);
-    }
-}
-
-async function pay() {
-    try {
-        const orderId = route.params.id;
-        const url = `https://localhost:7273/api/Orders/PayForOrder_${orderId}`
-        console.log(url)
+        const url = `https://localhost:7273/api/Orders/CancelOrder_${orderId}`
 
         const response = await fetch(url, {
             method: 'GET',
@@ -112,14 +88,14 @@ async function pay() {
             },
         });
 
-        if (response.ok) goToProfile()
-
 
         if (response.status != 404 && response.status != 200) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
+
+        if (response.ok) goToProfile()
     } catch (error) {
-        console.error('Не удалось оплатить бронь:', error);
+        console.error('Не удалось отменить бронь:', error);
     }
 }
 

@@ -16,6 +16,7 @@ namespace Booking_App.Server.Repository
         public async Task CreateReview(Review review)
         {
             await db.Reviews.AddAsync(review);
+            await db.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteReview(int id)
@@ -24,6 +25,7 @@ namespace Booking_App.Server.Repository
             if (review != null) 
             {
                 db.Reviews.Remove(review);
+                await db.SaveChangesAsync();
                 return true;
             }
             else
@@ -54,6 +56,7 @@ namespace Booking_App.Server.Repository
             {
                 r.Text = review.Text;
                 r.Rating = review.Rating;
+                await db.SaveChangesAsync();
                 return true;
             }
         }

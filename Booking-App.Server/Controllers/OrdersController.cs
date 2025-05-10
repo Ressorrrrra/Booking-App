@@ -11,13 +11,13 @@ namespace Booking_App.Server.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, IUserService userService)
         {
             _orderService = orderService;
+            _userService = userService;
         }
-
-
 
         // GET: Order
         [HttpGet]
@@ -35,25 +35,26 @@ namespace Booking_App.Server.Controllers
             else return Ok(order);
         }
 
-        [HttpGet("PayForOrder_{id}")]
-        public async Task<ActionResult> PayForOrder(int id)
+        [HttpGet("CancelOrder_{id}")]
+        public async Task<ActionResult> CancelOrder(int id)
         {
-            var result = await _orderService.PayForOrder(id);
+            var result = await _orderService.CancelOrder(id);
             if (!result) return NotFound();
             else return Ok();
         }
 
         //[Authorize(Roles ="user")]
-        [HttpGet("GetUserOrders_{userId}")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders(string userId)
+        [HttpGet("GetUserOrders")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders()
         {
-            var orders = await _orderService.GetUserOrders(userId);
+            var user = await _userService.IsAuthenticated(HttpContext.User);
+            var orders = await _orderService.GetUserOrders(user.UserId);
             return Ok(orders);
         }
 
         //[Authorize]
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> PostOrder(CreateOrderRequest order)
         {
             if (!ModelState.IsValid)
             {
@@ -62,6 +63,8 @@ namespace Booking_App.Server.Controllers
 
             try
             {
+                var user = await _userService.IsAuthenticated(HttpContext.User);
+                order.UserId = user.UserId;
                 await _orderService.CreateOrder(order);
             }
             catch
@@ -102,7 +105,7 @@ namespace Booking_App.Server.Controllers
         
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order order)
+        public async Task<IActionResult> UpdateOrder(int id, CreateOrderRequest order)
         {
             if (!ModelState.IsValid)
             {

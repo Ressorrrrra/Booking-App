@@ -30,7 +30,7 @@ namespace Booking_App.Server.Migrations
                         name: "FK_Reviews_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 

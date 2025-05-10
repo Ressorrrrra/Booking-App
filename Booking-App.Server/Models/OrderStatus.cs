@@ -2,10 +2,10 @@
 {
     public enum OrderStatus
     {
-        Cancelled,
-        Completed,
-        MovedIn,
-        Closed,
         Paid,
+        MovedIn,
+        Completed,
+        Cancelled,
+        Closed,
     }
 }

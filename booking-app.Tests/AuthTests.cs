@@ -57,7 +57,7 @@ namespace booking_app.Tests
         {
             // Arrange
             var loginRequest = new LogInRequest() { Email = "test_user", Password = "password123" };
-            var expectedResponse = new UserDataDto() { Id = "string", UserName = "test_user", UserRole = "Admin" };
+            var expectedResponse = new UserDataDto() { UserId = "string", UserName = "test_user", UserRole = "Admin" };
 
             userServiceMock.Setup(service => service.LogIn(loginRequest)).ReturnsAsync(expectedResponse);
 
@@ -71,7 +71,7 @@ namespace booking_app.Tests
 
             Assert.Equal(expectedResponse.UserName, responseValue.UserName);
             Assert.Equal(expectedResponse.UserRole, responseValue.UserRole);
-            Assert.Equal(expectedResponse.Id, responseValue.Id);
+            Assert.Equal(expectedResponse.UserId, responseValue.UserId);
         }
 
         [Fact]

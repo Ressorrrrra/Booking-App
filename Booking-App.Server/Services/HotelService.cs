@@ -15,8 +15,17 @@ namespace Booking_App.Server.Services
             _hotelRepository = hotelRepository;
         }
 
-        public async Task CreateHotel(Hotel hotel)
+        public async Task CreateHotel(CreateHotelRequest request)
         {
+            var hotel = new Hotel
+            {
+                City = request.City,
+                Country = request.Country,
+                Name = request.Name,
+                Description = request.Description,
+                PictureLinks = request.PictureLinks,
+                Tags = request.Tags,
+            };
             await _hotelRepository.CreateHotel(hotel);
         }
 
@@ -85,8 +94,17 @@ namespace Booking_App.Server.Services
             return hotelDtos;
         }
 
-        public async Task<bool> UpdateHotel(Hotel hotel, int id)
+        public async Task<bool> UpdateHotel(CreateHotelRequest request, int id)
         {
+            var hotel = new Hotel
+            {
+                City = request.City,
+                Country = request.Country,
+                Name = request.Name,
+                Description = request.Description,
+                PictureLinks = request.PictureLinks,
+                Tags = request.Tags,
+            };
             return await _hotelRepository.UpdateHotel(hotel, id);
         }
     }

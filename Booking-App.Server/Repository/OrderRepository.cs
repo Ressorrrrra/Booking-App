@@ -25,11 +25,6 @@ namespace Booking_App.Server.Repository
         public async Task CreateOrder(Order order)
         {
             db.Orders.Add(order);
-            await SaveAsync();
-        }
-
-        private async Task SaveAsync()
-        {
             await db.SaveChangesAsync();
         }
 
@@ -41,7 +36,7 @@ namespace Booking_App.Server.Repository
                 return false;
             }
             db.Orders.Remove(order);
-            await SaveAsync();
+            await db.SaveChangesAsync();
             return true;
         }
 
@@ -57,13 +52,13 @@ namespace Booking_App.Server.Repository
             db.Orders.Attach(order);
             db.Entry(order).State = EntityState.Modified;
 
-            await SaveAsync();
+            await db.SaveChangesAsync();
             return true;
         }
 
         public async Task<List<Order>?> GetUserOrders(string userId)
         {
-            return await db.Orders.Where(o => o.UserId == userId).Include(o => o.Room.Hotel).ToListAsync();
+            return await db.Orders.Where(o => o.UserId == userId).Include(o => o.Room).ThenInclude(r => r.Hotel).ToListAsync();
         }
 
         public async Task<Room?> GetRoomById(int roomId)
@@ -71,15 +66,12 @@ namespace Booking_App.Server.Repository
             return await db.Rooms.FirstOrDefaultAsync(r  => r.Id == roomId);
         }
 
-        public async Task<bool> PayForOrder(int id)
+        public async Task<bool> CancelOrder(int id)
         {
-            var order = await db.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
+            var order = await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) return false;
-            order.OrderStatus = OrderStatus.Paid;
-            db.Orders.Attach(order);
-            db.Entry(order).State = EntityState.Modified;
-
-            await SaveAsync();
+            order.OrderStatus = OrderStatus.Cancelled;
+            await db.SaveChangesAsync();
             return true;
         }
     }

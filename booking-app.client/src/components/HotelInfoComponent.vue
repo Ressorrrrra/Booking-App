@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import Image from 'primevue/image';
@@ -45,13 +45,16 @@ import Reviews from './ReviewListComponent.vue'
 const router = useRouter();
 const route = useRoute();
 const hotel = ref(null);
+const globalVar = inject('globalVar')
 
 async function fetchHotelData() {
     try {
         const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
-        const response = await fetch(`https://localhost:7273/api/Hotels/${hotelId}`);
+        const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId}`);
         console.log(`https://localhost:7273/api/Hotels/${hotelId}`)
+        console.log(response)
         if (!response.ok) throw new Error('Ошибка при загрузке данных');
+
         hotel.value = await response.json();
     } catch (error) {
         console.error('Ошибка:', error);

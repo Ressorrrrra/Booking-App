@@ -9,10 +9,8 @@ namespace Booking_App.Server.Models
         public int Capacity { get; set; }
         public decimal Price { get; set; }
         public int HotelId { get; set; }
+        public Hotel Hotel { get; set; } = null!;
 
-        [JsonIgnore]
-        public Hotel? Hotel { get; set; }
-
-        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Order> Orders { get; set; } = null!;
     }
 }
