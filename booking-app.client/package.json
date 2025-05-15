@@ -9,16 +9,16 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "ionic:build": "npm run build",
-    "ionic:serve": "vite dev --host"
+    "ionic:serve": "vite dev"
   },
   "dependencies": {
-    "@capacitor/android": "6.1.2",
-    "@capacitor/app": "6.0.1",
-    "@capacitor/cli": "6.1.2",
-    "@capacitor/core": "6.1.2",
-    "@capacitor/haptics": "6.0.1",
-    "@capacitor/keyboard": "6.0.2",
-    "@capacitor/status-bar": "6.0.1",
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/keyboard": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0",
     "@primevue/forms": "^4.2.1",
     "@primevue/themes": "^4.2.1",
     "gradle": "^1.2.4",
@@ -31,6 +31,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.0.0",
     "@eslint/js": "^9.13.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "eslint": "^9.13.0",

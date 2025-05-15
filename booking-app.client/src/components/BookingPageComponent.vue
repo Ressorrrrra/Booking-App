@@ -52,8 +52,6 @@
 
         <p class="price">Итого: {{ totalPrice }} ₽
         </p>
-
-        <Navbar></Navbar>
     </Form>
 </template>
 
@@ -61,7 +59,6 @@
 import { onMounted, ref, inject } from 'vue';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
-import Navbar from './NavbarComponent.vue';
 import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
 import { Form } from '@primevue/forms';
@@ -155,7 +152,7 @@ async function GetPrice(form) {
 async function GetRooms(form) {
     const hotelId = route.params.id
 
-    const roomsUrl = `${globalVar.apiUrl}/Hotels/${hotelId}/GetRooms`
+    const roomsUrl = `${globalVar.apiUrl}/Hotels/${hotelId}/GetAvailableRooms`
 
     roomRequest = {
         arrivalDate: form.arrivalDate.value,

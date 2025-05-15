@@ -5,12 +5,12 @@
         </div>
         <div v-else>
             <div v-for="hotel in hotels" :key="hotel.id" class="item">
-                <Image :src="hotel.picture" width="150" height="110" />
+                <Image :src="hotel.picture" width="128" height="110" />
                 <div class="info">
                     <p class="hotelName">{{ hotel.name }}</p>
                     <p class="price">От {{ hotel.price }}₽ за ночь</p>
                     <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
-                    <Button label="Забронировать номер" @click="goToHotelInfo(hotel.id)" />
+                    <Button class="button" label="Забронировать номер" @click="goToHotelInfo(hotel.id)" />
                 </div>
             </div>
         </div>
@@ -85,7 +85,8 @@ watch(
 .hotelList {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: auto;
     /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
@@ -94,7 +95,7 @@ watch(
 
 .hotelList .item {
     margin: 10px;
-    display: grid;
+    display: flex;
     grid-auto-flow: row;
     /* Переводим в ряд для мобильных устройств */
     grid-gap: 10px;
@@ -113,7 +114,7 @@ watch(
     display: block;
 }
 
-.bookingHistory .item .info {
+.hotelList .item .info {
     margin: 10px;
     margin-left: 0;
     display: flex;
@@ -122,21 +123,23 @@ watch(
     align-items: flex-start;
 }
 
-.bookingHistory .item .info .hotelName {
-    font-size: 1.2rem;
+.hotelList .item .info .hotelName {
+    font-size: 1.0rem;
     /* Используем относительные единицы для адаптивности */
     font-weight: 600;
 }
 
-.bookingHistory .item .info .price {
+.hotelList .item .info .price {
     font-size: 1rem;
     /* Также используем относительные единицы */
-    font-weight: 500;
 }
 
-.bookingHistory .item .info .location {
+.hotelList .item .info .location {
     font-size: 0.9rem;
-    color: #777;
+}
+
+.hotelList .item .info .button {
+    font-size: 0.7rem;
 }
 
 /* Медиазапросы для мобильных устройств */
@@ -152,7 +155,7 @@ watch(
         margin: 0;
     }
 
-    .bookingHistory .item .info {
+    .hotelList .item .info {
         align-items: flex-start;
         margin-left: 0;
         /* Убираем отступ слева на маленьких экранах */
@@ -184,21 +187,21 @@ watch(
         /* Изображения для больших экранов */
     }
 
-    .bookingHistory .item .info {
+    .hotelList .item .info {
         margin-left: 20px;
         /* Добавляем отступы для большего экрана */
     }
 
-    .bookingHistory .item .info .hotelName {
+    .hotelList .item .info .hotelName {
         font-size: 1.5rem;
         /* Увеличиваем размер шрифта для названия отеля */
     }
 
-    .bookingHistory .item .info .price {
+    .hotelList .item .info .price {
         font-size: 1.2rem;
     }
 
-    .bookingHistory .item .info .location {
+    .hotelList .item .info .location {
         font-size: 1rem;
     }
 }

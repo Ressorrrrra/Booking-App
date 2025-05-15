@@ -24,7 +24,6 @@
             <Message v-if="failedLogin">{{ errorMessage }}</Message>
             <p> Нет аккаунта? <span @click="goToRegistration">Зарегистрироваться</span></p>
         </div>
-
     </Form>
 
 </template>
@@ -110,6 +109,7 @@ function goToRegistration() {
 }
 
 async function _checkAuth() {
+    console.log(54)
     const auth = await checkAuth()
     if (auth.isAuthorized) {
 

@@ -10,7 +10,6 @@ namespace Booking_App.Server.Services.Interfaces
         public Task<IdentityResult> Register(RegistrationRequest request);
         public Task<UserDataDto?> LogIn(LogInRequest request);
         public Task<bool> LogOff(ClaimsPrincipal userData);
-
         public Task<UserDataDto?> IsAuthenticated(ClaimsPrincipal userData);
     }
 }

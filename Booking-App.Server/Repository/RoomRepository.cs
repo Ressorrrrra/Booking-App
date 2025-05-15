@@ -19,6 +19,11 @@ namespace Booking_App.Server.Repository
             await db.SaveChangesAsync();
         }
 
+        public async Task CreateRooms(List<Room> rooms)
+        {
+            await db.Rooms.AddRangeAsync(rooms);
+        }
+
         public async Task<bool> DeleteRoom(int id)
         {
             var room = await this.GetRoom(id);
@@ -40,6 +45,21 @@ namespace Booking_App.Server.Repository
             return await db.Rooms.Include(r => r.Hotel).FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<List<Room>> SearchHotelRooms(HotelRoomSearchRequest request, int hotelId)
+        {
+            var hotel = await db.Hotels.Include(hotel => hotel.Rooms).FirstOrDefaultAsync(hotel => hotel.Id == hotelId);
+            if (hotel != null && hotel.Rooms != null && hotel.Rooms.Count > 0) 
+            {
+                return hotel.Rooms.Where(room => room.Number.ToString().Contains(request.Number.ToString() ?? "") &&
+                    (!request.MinPrice.HasValue || room.Price >= request.MinPrice.Value) &&
+                    (!request.MaxPrice.HasValue || room.Price <= request.MaxPrice.Value)).ToList();
+            }
+            else
+            {
+                return new List<Room>();
+            }
+        }
+
         public Task<List<Room>> SearchRooms(RoomSearchRequest request, int hotelId)
         {
             return db.Rooms.Include(room => room.Orders)
@@ -53,9 +73,20 @@ namespace Booking_App.Server.Repository
                 ).ToListAsync();
         }
 
-        public Task<bool> UpdateRoom(Room room, int id)
+        public async Task<bool> UpdateRoom(Room room, int id)
         {
-            throw new NotImplementedException();
+            var existingRoom = await db.Rooms.FirstOrDefaultAsync(room => room.Id == id);
+            if (existingRoom == null)
+            {
+                return false;
+            }
+
+            existingRoom.Number = room.Number;
+            existingRoom.Price = room.Price;
+            existingRoom.Capacity = room.Capacity;
+
+            await db.SaveChangesAsync();
+            return true;
         }
     }
 }

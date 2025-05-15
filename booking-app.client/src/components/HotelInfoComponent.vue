@@ -18,14 +18,16 @@
             <Tag v-for="(tag, index) in hotel.tags" :key="index" :value="tag" />
         </div>
 
+        <p class="header">Фотографии</p>
+
         <div class="pictures">
-            <p class="header">Фотографии</p>
             <div class="content">
                 <Image v-for="(picture, index) in hotel.pictureLinks" :key="index" :src="picture" preview width="150" />
             </div>
         </div>
+
+        <p class="reviews-p">Отзывы</p>
         <Reviews></Reviews>
-        <Navbar />
     </div>
 
     <div v-else>
@@ -38,7 +40,6 @@ import { ref, onMounted, inject } from 'vue';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import Image from 'primevue/image';
-import Navbar from './NavbarComponent.vue';
 import { useRouter, useRoute } from 'vue-router';
 import Reviews from './ReviewListComponent.vue'
 
@@ -51,7 +52,7 @@ async function fetchHotelData() {
     try {
         const hotelId = route.params.id; // Предполагаем, что ID передаётся в параметрах маршрута
         const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId}`);
-        console.log(`https://localhost:7273/api/Hotels/${hotelId}`)
+        console.log(`${globalVar.apiUrl}/Hotels/${hotelId}`)
         console.log(response)
         if (!response.ok) throw new Error('Ошибка при загрузке данных');
 
@@ -75,6 +76,10 @@ onMounted(fetchHotelData);
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.hotelInfo .reviews-p {
+    font-weight:600
 }
 
 .hotelInfo .mainInfo {
@@ -135,7 +140,7 @@ onMounted(fetchHotelData);
     margin: 10px;
 }
 
-.hotelInfo .pictures .header {
+.hotelInfo  .header {
     font-size: 1rem;
     font-weight: 600;
 }

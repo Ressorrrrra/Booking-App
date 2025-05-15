@@ -7,7 +7,7 @@
             <div v-for="review in reviews" :key="review.id" class="item">
                 <div class="info">
                     <p class="username">{{ review.username }}</p>
-                    <p class="rating">{{ review.rating }}</p>
+                    <Rating v-model="review.rating" readonly></Rating>
                     <p class="text">{{ review.text }}</p>
                 </div>
             </div>
@@ -18,6 +18,7 @@
 <script setup>
 import { ref, onMounted, inject } from 'vue';
 import { useRoute } from 'vue-router';
+import  Rating  from 'primevue/rating';
 
 const reviews = ref([]); // Состояние для хранения списка отелей
 const route = useRoute();
@@ -52,7 +53,6 @@ onMounted(fetchReviews)
     width: 100%;
     height: auto;
     /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
-    padding: 30px;
 }
 
 .reviewList .item {

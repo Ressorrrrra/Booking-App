@@ -73,7 +73,7 @@ async function onFormSubmit(form) {
     }
     else {
         try {
-            const url = `https://localhost:7273/api/Accounts/register`;
+            const url = `${globalVar.apiUrl}/Accounts/register`;
 
             regRequest = {
                 email: form.states.email.value,

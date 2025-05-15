@@ -1,20 +1,18 @@
 <template>
-    <div class="orderList">
+    <div>
         <div v-if="!orders.length" class="noResults">
             У вас нет бронирований
         </div>
-        <div v-else>
+        <div class="orderList" v-else>
             <div v-for="order in orders" :key="order.id" class="item">
-                <Image :src="order.hotel.picture" width="190" class="image" />
-
+                <Image :src="order.hotel.picture" width="128" class="image" />
                 <div class="info">
-                    <p class="hotelName">{{ order.hotel.name }}</p>
-                    <p>{{ formatDate(order.arrivalDate) }} - {{ formatDate(order.departureDate) }}</p>
-                    <p> {{ order.OrderStatus }}</p>
-                    <Button type="bookingInfo" severity="secondary" label="Информация о заказе"
+                    <p class="name">{{ order.hotel.name }}</p>
+                    <p class="dates">{{ formatDate(order.arrivalDate) }} - {{ formatDate(order.departureDate) }}</p>
+                    <Button class="button1" type="bookingInfo" severity="secondary" label="Информация о брони"
                         @click="goToBookingInfo(order.id)">
                     </Button>
-                    <Button label="Оставить отзыв" @click="openModal(order)" />
+                    <Button class="button1" label="Оставить отзыв" @click="openModal(order)" />
                 </div>
             </div>
 
@@ -153,48 +151,49 @@ function formatDate(isoDate) {
 .orderList {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: auto;
-    /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
-    padding: 10px;
+    padding: 30px;
 }
 
+
 .orderList .item {
-    margin: 10px;
-    display: grid;
-    grid-auto-flow: row;
-    /* Переводим в ряд для мобильных устройств */
-    grid-gap: 10px;
-    justify-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    /* Делает каждый элемент растягивающимся по ширине */
 }
 
 .orderList .item .image {
     width: 100%;
-    /* Сделаем изображения адаптивными */
     max-width: 300px;
-    /* Ограничим максимальную ширину */
-    margin: 0 auto;
+    margin-right: 10px;
     display: block;
 }
 
 .orderList .item .info {
-    margin: 10px;
-    margin-left: 0;
+    margin-left: 10px;
     display: flex;
+    gap: 3px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 }
 
-.orderList .item .info .hotelName {
-    font-size: 1.2rem;
-    /* Используем относительные единицы для адаптивности */
+.orderList .item .info .dates {
+    font-size: 14px;
+}
+
+.orderList .item .info .name {
     font-weight: 600;
 }
+
+.orderList .item .info .button1 {
+    font-size: 11px;
+    width: 150px;
+}
+
 
 /* Медиазапросы для мобильных устройств */
 @media (max-width: 600px) {
@@ -244,11 +243,6 @@ function formatDate(isoDate) {
     .orderList .item .info {
         margin-left: 20px;
         /* Добавляем отступы для большего экрана */
-    }
-
-    .orderList .item .info .hotelName {
-        font-size: 1.5rem;
-        /* Увеличиваем размер шрифта для названия отеля */
     }
 }
 </style>

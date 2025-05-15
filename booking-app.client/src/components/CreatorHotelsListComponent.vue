@@ -1,16 +1,16 @@
 <template>
     <div class="hotelList">
         <div v-if="!hotels.length" class="noResults">
-            Ничего не найдено по вашему запросу
+            Вы пока не создали ни одного отеля.
         </div>
-        <div v-else>
+        <div class="items" v-else>
             <div v-for="hotel in hotels" :key="hotel.id" class="item">
-                <Image :src="hotel.picture" width="150" height="110" />
+                <Image :src="hotel.picture" width="128" />
                 <div class="info">
                     <p class="hotelName">{{ hotel.name }}</p>
                     <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
-                    <Button label="Изменить информацию об отеле" @click="goToHotelInfo(hotel.id)" />
-                    <Button label="Управление номерами" @click="goToHotelInfo(hotel.id)" />
+                    <Button class="button" label="Изменить информацию" @click="goToEditHotel(hotel.id)" />
+                    <Button class="button" label="Управление номерами" @click="goToRoomControl(hotel.id)" />
                 </div>
             </div>
         </div>
@@ -18,35 +18,27 @@
 </template>
 
 <script setup>
-import { ref, watch, inject } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { Button } from 'primevue';
 import { useRouter } from 'vue-router';
 import Image from 'primevue/image';
 
-// Проп с критериями поиска (может быть null или объектом с параметрами поиска)
-const props = defineProps({
-    criteria: {
-        type: Object,
-        default: () => null
-    }
-});
 
 const hotels = ref([]); // Состояние для хранения списка отелей
 const router = useRouter();
 const globalVar = inject('globalVar')
 
 // Функция для получения данных с сервера
-async function fetchHotels(searchCriteria) {
+async function fetchHotels() {
     try {
-        const url =  `${globalVar.apiUrl}/Hotels/GetHotelsByCreatorId`
+        const url = `${globalVar.apiUrl}/Hotels/GetHotelsByCreatorId`
 
         const response = await fetch(url, {
-            method: 'GET', 
+            credentials: "include",
+            method: 'GET',
             headers: {
-                credentials: "include",
                 'Content-Type': 'application/json'
             },
-            body: searchCriteria ? JSON.stringify(searchCriteria) : null
         });
 
 
@@ -63,20 +55,18 @@ async function fetchHotels(searchCriteria) {
     }
 }
 
-// Переход на страницу информации об отеле
-function goToHotelInfo(hotelId) {
-    router.push({ name: 'hotelinfo', params: { id: hotelId } });
+function goToEditHotel(hotelId) {
+    console.log(hotelId)
+    router.push({ name: 'createHotel', params: { id: hotelId } });
 }
 
-// Обновление данных при изменении критерия поиска
-watch(
-    () => props.criteria, // Доступ к критериям через props
-    (newCriteria) => {
-        console.log('Критерии поиска изменились:', newCriteria);
-        fetchHotels(newCriteria);
-    },
-    { immediate: true }
-);
+// Переход на страницу информации об отеле
+function goToRoomControl(hotelId) {
+    console.log(hotelId)
+    router.push({ name: 'roomControl', params: { id: hotelId } });
+}
+
+onMounted(fetchHotels)
 </script>
 
 
@@ -88,13 +78,20 @@ watch(
     width: 100%;
     height: auto;
     /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
-    padding: 10px;
 }
 
-.hotelList .item {
-    margin: 10px;
-    display: grid;
-    grid-auto-flow: row;
+.hotelList .items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    /* Убираем фиксированную высоту, чтобы контейнер подстраивался под контент */
+}
+
+.hotelList .items .item {
+    display: flex;
+    flex-direction: row;
     /* Переводим в ряд для мобильных устройств */
     grid-gap: 10px;
     justify-items: center;
@@ -103,39 +100,40 @@ watch(
     /* Делает каждый элемент растягивающимся по ширине */
 }
 
-.hotelList .item .image {
+.hotelList .items .item .image {
     width: 100%;
     /* Сделаем изображения адаптивными */
-    max-width: 300px;
+    max-width: 200px;
+    height: auto;
     /* Ограничим максимальную ширину */
     margin: 0 auto;
     display: block;
 }
 
-.bookingHistory .item .info {
-    margin: 10px;
-    margin-left: 0;
+.hotelList .items .item .info {
+    gap: 3px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 }
 
-.bookingHistory .item .info .hotelName {
-    font-size: 1.2rem;
+.hotelList .items .item .info .hotelName {
+    font-size: 1.0rem;
     /* Используем относительные единицы для адаптивности */
     font-weight: 600;
 }
 
-.bookingHistory .item .info .price {
-    font-size: 1rem;
-    /* Также используем относительные единицы */
-    font-weight: 500;
-}
 
-.bookingHistory .item .info .location {
+.hotelList .items .item .info .location {
     font-size: 0.9rem;
     color: #777;
+}
+
+.hotelList .items .item .info .button {
+    font-size: 0.7rem;
+    width: 170px;
+    height: 30px
 }
 
 /* Медиазапросы для мобильных устройств */

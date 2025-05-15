@@ -1,18 +1,7 @@
 <template>
     <Toolbar class="navbar">
         <template #start>
-            <Button class="button" label="Поиск" @click="goToSearch" icon="pi pi-search" iconPos="top"
-                variant="link"></Button>
-        </template>
-
-        <template #center>
-            <Button class="button" label="Главная" @click="goToMainPage" icon="pi pi-home" iconPos="top"
-                variant="link"></Button>
-        </template>
-
-        <template #end>
-            <Button class="button" label="Профиль" @click="goToProfile" icon="pi pi-user" iconPos="top"
-                variant="link"></Button>
+            <Button class="button" @click="router.goBack" icon="pi pi-arrow-left" iconPos="top" variant="link"></Button>
         </template>
     </Toolbar>
 </template>
@@ -23,30 +12,18 @@ import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
-function goToMainPage() {
-    router.push({ name: 'mainpage' });
-}
-
-function goToSearch() {
-    router.push({ name: 'search' });
-}
-
-function goToProfile() {
-    router.push({ name: 'profile' });
-}
 </script>
 
 <style scoped>
 .navbar {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: -0.5%;
     right: 0;
     width: 101%;
+    height: 9%;
     background-color: white;
     border-top: 1px solid #e5e7eb;
-    padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

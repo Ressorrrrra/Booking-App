@@ -40,6 +40,7 @@ export async function checkAuth() {
 
     if (response.ok) {
       const data = await response.json();
+
       await onUserLogin({ userName: data.userName, roles: data.userRole });
       return {
         userName: data.userName,

@@ -55,10 +55,18 @@ namespace Booking_App.Server.Controllers
 
         // GET: Hotels
         [HttpGet("GetHotelsByCreatorId")]
-        public async Task<ActionResult<List<Hotel>>> GetHotelsByCreatorId()
+        public async Task<ActionResult<List<HotelShortDto>>> GetHotelsByCreatorId()
         {
-            var hotels = await _hotelService.GetHotels();
-            return Ok(hotels);
+            var user = await _userService.IsAuthenticated(HttpContext.User);
+            if (user != null)
+            {
+                var hotels = await _hotelService.GetHotelsByCreatorId(user.UserId);
+                return Ok(hotels);
+            }
+            else
+            {
+                return NotFound();
+            }
         }   
 
         [HttpGet("{hotelId}/Reviews")]
@@ -68,11 +76,26 @@ namespace Booking_App.Server.Controllers
             return Ok(reviews);
         }
 
-        [HttpPost("{hotelId}/GetRooms")]
+        [HttpPost("{hotelId}/GetAvailableRooms")]
         public async Task<ActionResult<IEnumerable<RoomDto>>> GetAvailableRooms(RoomSearchRequest request, int hotelId)
         {
             var rooms = await _roomService.SearchRooms(request, hotelId);
             return Ok(rooms);
+        }
+
+        [HttpPost("{hotelId}/SearchRooms")]
+        public async Task<ActionResult<IEnumerable<RoomDto>>> SearchRooms(HotelRoomSearchRequest request, int hotelId)
+        {
+            var rooms = await _roomService.SearchHotelRooms(request, hotelId);
+            return Ok(rooms);
+        }
+
+        [HttpGet("{hotelId}/Rooms/{roomId}")]
+        public async Task<ActionResult<RoomDto>> GetRoomById(int roomId)
+        {
+            var room = await _roomService.GetRoom(roomId);
+            if (room == null) return NotFound();
+            else return Ok(room);
         }
 
         [HttpPost("{hotelId}/Rooms")]
@@ -130,7 +153,10 @@ namespace Booking_App.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _hotelService.CreateHotel(request);
+            var user = await _userService.IsAuthenticated(HttpContext.User);
+
+            if (user == null || !user.UserRole.Contains("hotelRepresentative")) return Unauthorized();
+            else await _hotelService.CreateHotel(request, user.UserId);
             return Created();
         }
         

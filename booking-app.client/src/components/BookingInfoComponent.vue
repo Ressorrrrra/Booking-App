@@ -19,7 +19,6 @@
             <p>Детей: {{ order.childrenAmount }}</p>
             <p>Статус: {{ OrderStatusMapper[order.orderStatus] }}</p>
         </div>
-        <Navbar></Navbar>
     </div>
 
     <div v-else>
@@ -30,7 +29,6 @@
 <script setup>
 import Button from 'primevue/button';
 import Image from 'primevue/image';
-import Navbar from './NavbarComponent.vue';
 import { onMounted, ref } from 'vue';
 import { checkAuth } from '@/plugins/userStatePlugin';
 import router from '@/router';

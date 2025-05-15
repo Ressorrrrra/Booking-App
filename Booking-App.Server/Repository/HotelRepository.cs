@@ -2,6 +2,7 @@
 using Booking_App.Server.Models;
 using Booking_App.Server.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Reflection.PortableExecutable;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -47,15 +48,18 @@ namespace Booking_App.Server.Repository
 
         public async Task<bool> UpdateHotel(Hotel hotel, int id)
         {
-            var existingHotel = await db.Hotels.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
+            var existingHotel = await db.Hotels.FirstOrDefaultAsync(h => h.Id == id);
             if (existingHotel == null)
             {
                 return false; 
             }
 
-            hotel.Id = id; 
-            db.Hotels.Attach(hotel);
-            db.Entry(hotel).State = EntityState.Modified;
+            existingHotel.PictureLinks = hotel.PictureLinks;
+            existingHotel.City = hotel.City;
+            existingHotel.Country = hotel.Country;
+            existingHotel.Description = hotel.Description;
+            existingHotel.Name = hotel.Name;
+            existingHotel.Tags = hotel.Tags;
 
             await db.SaveChangesAsync();
             return true;
@@ -88,9 +92,9 @@ namespace Booking_App.Server.Repository
             .ToListAsync();
         }
 
-        public Task<List<Hotel>> GetHotelsByCreatorId()
+        public Task<List<Hotel>> GetHotelsByCreatorId(string creatorId)
         {
-            throw new NotImplementedException();
+            return db.Hotels.Where(hotel => hotel.CreatorId == creatorId).ToListAsync();
         }
     }
 }

@@ -58,11 +58,7 @@
 
         </div>
         <HotelList :criteria="searchRequest" />
-        <Navbar />
     </Form>
-
-
-
 </template>
 
 
@@ -74,7 +70,6 @@ import InputIcon from 'primevue/inputicon';
 import IconField from 'primevue/iconfield';
 import DatePicker from 'primevue/datepicker';
 import AutoComplete from 'primevue/autocomplete';
-import Navbar from './NavbarComponent.vue';
 import HotelList from './HotelListComponent.vue';
 
 const initialValues = {

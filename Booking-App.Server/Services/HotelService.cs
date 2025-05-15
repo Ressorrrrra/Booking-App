@@ -15,11 +15,12 @@ namespace Booking_App.Server.Services
             _hotelRepository = hotelRepository;
         }
 
-        public async Task CreateHotel(CreateHotelRequest request)
+        public async Task CreateHotel(CreateHotelRequest request, string creatorId)
         {
             var hotel = new Hotel
             {
                 City = request.City,
+                CreatorId = creatorId,
                 Country = request.Country,
                 Name = request.Name,
                 Description = request.Description,
@@ -42,6 +43,18 @@ namespace Booking_App.Server.Services
         public async Task<List<Hotel>?> GetHotels()
         {
             return await _hotelRepository.GetHotels();
+        }
+
+        public async Task<List<HotelShortDto>> GetHotelsByCreatorId(string creatorId)
+        {
+            return (await _hotelRepository.GetHotelsByCreatorId(creatorId)).Select(hotel => new HotelShortDto
+            {
+                City = hotel.City,
+                Country = hotel.Country,
+                Name = hotel.Name,
+                Id = hotel.Id,
+                Picture = hotel.PictureLinks[0]
+            }).ToList();
         }
 
         public async Task<List<HotelShortDto>?> GetHotelsDTO()

@@ -14,16 +14,28 @@ namespace Booking_App.Server.Services
         {
             _roomRepository = roomRepository;
         }
-        public async Task CreateRoom(CreateRoomRequest room, int hotelId)
+        public async Task CreateRoom(CreateRoomRequest roomDto, int hotelId)
         {
-            var _room = new Room
+            var room = new Room
+            {
+                HotelId = hotelId,
+                Capacity = roomDto.Capacity,
+                Number = roomDto.Number,
+                Price = roomDto.Price,
+            };
+           await _roomRepository.CreateRoom(room);
+        }
+
+        public async Task CreateRooms(List<CreateRoomRequest> roomsDto, int hotelId)
+        {
+            var rooms = roomsDto.Select(room => new Room
             {
                 HotelId = hotelId,
                 Capacity = room.Capacity,
                 Number = room.Number,
                 Price = room.Price,
-            };
-           await _roomRepository.CreateRoom(_room);
+            }).ToList();
+            await _roomRepository.CreateRooms(rooms);
         }
 
         public async Task<bool> DeleteRoom(int id)
@@ -42,6 +54,7 @@ namespace Booking_App.Server.Services
                     Id = room.Id,
                     Number = room.Number,
                     Price = room.Price,
+                    Capacity = room.Capacity,
                 };
                 return roomDto;
             }
@@ -52,6 +65,17 @@ namespace Booking_App.Server.Services
             var rooms = await _roomRepository.SearchRooms(request, hotelId);
             return rooms.Select(room => new RoomDto 
             { 
+                Id = room.Id,
+                Number = room.Number,
+                Price = room.Price,
+            }).ToList();
+        }
+
+        public async Task<List<RoomDto>> SearchHotelRooms(HotelRoomSearchRequest request, int hotelId)
+        {
+            var rooms = await _roomRepository.SearchHotelRooms(request, hotelId);
+            return rooms.Select(room => new RoomDto
+            {
                 Id = room.Id,
                 Number = room.Number,
                 Price = room.Price,

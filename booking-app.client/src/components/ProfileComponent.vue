@@ -10,13 +10,10 @@
         </div>
 
         <p>Ваши бронирования:</p>
-        <ScrollPanel class="bookingHistory">
+        <ScrollPanel>
             <BookingHistoryComponent></BookingHistoryComponent>
         </ScrollPanel>
-        <Navbar></Navbar>
     </div>
-
-
 </template>
 
 <script setup>
@@ -24,7 +21,6 @@ import BookingHistoryComponent from './BookingHistoryComponent.vue';
 import { ref, inject } from 'vue';
 import { Image } from 'primevue';
 import Button from 'primevue/button';
-import Navbar from './NavbarComponent.vue';
 import ScrollPanel from 'primevue/scrollpanel';
 import { useRouter } from 'vue-router';
 import { checkAuth } from '@/plugins/userStatePlugin';
@@ -62,7 +58,7 @@ async function logOut() {
 async function _checkAuth() {
     const auth = await checkAuth()
     console.log(auth)
-    if (!auth.isAuthorized) {
+    if (auth === undefined || !auth.isAuthorized) {
         goToLogin()
     }
     else {
