@@ -1,0 +1,33 @@
+{
+  "id": "booking-app",
+  "name": "Booking app",
+  "short_name": "Booking app",
+  "theme_color": "#00ff00",
+  "background_color": "#c0f5f2",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "1969.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "Pc.png",
+      "sizes": "1584x750",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Auth screen"
+    },
+    {
+      "src": "screenshots/Mobile.png",
+      "sizes": "449x806",
+      "type": "image/png",
+      "label": "Auth screen"
+    }
+  ]
+}
