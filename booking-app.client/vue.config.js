@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   pwa: {
     name: "Poolio",
     themeColor: "#205c94",
@@ -14,7 +14,7 @@ module.exports = {
     },
     workboxPluginMode: "InjectManifest",
     workboxOptions: {
-      swSrc: "src/service-worker.js"
+      swSrc: "src/registerServiceWorker.js"
     }
   }
 };

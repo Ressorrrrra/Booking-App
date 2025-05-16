@@ -8,7 +8,7 @@
                 <Image :src="hotel.picture" width="128" height="110" />
                 <div class="info">
                     <p class="hotelName">{{ hotel.name }}</p>
-                    <p class="price">От {{ hotel.price }}₽ за ночь</p>
+                    <p class="price">От {{ hotel.minPrice }}₽ за ночь</p>
                     <p class="location">{{ hotel.country }}, {{ hotel.city }}</p>
                     <Button class="button" label="Забронировать номер" @click="goToHotelInfo(hotel.id)" />
                 </div>

@@ -25,7 +25,7 @@ namespace Booking_App.Server.Repository
 
         public async Task<List<Hotel>> GetHotels()
         {
-            return await db.Hotels.ToListAsync();
+            return await db.Hotels.Include(hotel => hotel.Rooms).ToListAsync();
         }
 
         public async Task CreateHotel(Hotel hotel)
@@ -67,7 +67,8 @@ namespace Booking_App.Server.Repository
 
         public async Task<List<Hotel>> SearchHotels(HotelSearchRequest request)
         {
-            return await db.Hotels
+            return await db.Hotels.Include
+                (hotel => hotel.Rooms)
             .Where(hotel =>
                 // Фильтрация по названию отеля (если указано)
                 (string.IsNullOrEmpty(request.Name) || hotel.Name.ToLower().Contains(request.Name.ToLower())) &&
@@ -96,5 +97,40 @@ namespace Booking_App.Server.Repository
         {
             return db.Hotels.Where(hotel => hotel.CreatorId == creatorId).ToListAsync();
         }
+
+        public async Task CloseRoom(int roomId, string userId, DateTime startDate, DateTime endDate)
+        {
+            var room = await db.Rooms.FirstOrDefaultAsync(room => room.Id == roomId);
+            if (room == null) return;
+            var time = DateTime.UtcNow;
+            var closeOrder = new Order
+            {
+                AdultsAmount = 0,
+                ChildrenAmount = 0,
+                ArrivalDate = startDate,
+                DepartureDate = endDate,
+                OrderStatus = OrderStatus.Closed,
+                TotalPrice = 0,
+                RoomId = roomId,
+                UserId = userId,
+                OrderTime = time,
+            };
+            await db.Orders.AddAsync(closeOrder);
+
+            var orders = await db.Orders.Where(order => order.RoomId == roomId && (order.ArrivalDate >= startDate && order.ArrivalDate <= endDate
+                        || order.DepartureDate >= startDate && order.DepartureDate <= endDate)).ToListAsync();
+            foreach (var order in orders)
+            {
+                order.OrderStatus = OrderStatus.Cancelled;
+            }
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<List<Order>> GetRoomOrders(int roomId)
+        {
+            var oneMonthLater = DateTime.UtcNow.AddDays(30);
+            return await db.Orders.Where(order => order.RoomId == roomId && (order.OrderStatus != OrderStatus.Cancelled || order.OrderStatus != OrderStatus.Completed) && order.DepartureDate > DateTime.UtcNow && order.DepartureDate <= oneMonthLater).OrderBy(order => order.DepartureDate).ToListAsync();
+        }
+
     }
 }

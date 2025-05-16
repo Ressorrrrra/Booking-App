@@ -12,3 +12,10 @@
 import TopBar from '@/components/TopBarComponent.vue';
 import Navbar from '@/components/NavbarComponent.vue';
 </script>
+
+<style>
+main {
+    margin-bottom: 80px;
+    margin-top: 60px;
+}
+</style>

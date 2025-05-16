@@ -8,7 +8,7 @@ import { userStatePlugin } from "./plugins/userStatePlugin";
 
 import "primeicons/primeicons.css";
 import Aura from "@primevue/themes/aura";
-import './registerServiceWorker'
+import "./registerServiceWorker";
 
 const app = createApp(App);
 app.use(router);

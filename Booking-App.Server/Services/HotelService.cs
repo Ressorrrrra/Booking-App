@@ -15,6 +15,11 @@ namespace Booking_App.Server.Services
             _hotelRepository = hotelRepository;
         }
 
+        public async Task CloseRoom(int roomId, string UserId, DateTime startDate, DateTime endDate)
+        {
+            await _hotelRepository.CloseRoom(roomId, UserId, startDate, endDate);    
+        }
+
         public async Task CreateHotel(CreateHotelRequest request, string creatorId)
         {
             var hotel = new Hotel
@@ -80,6 +85,23 @@ namespace Booking_App.Server.Services
                 .ToList();
 
             return hotelDtos;
+        }
+
+        public async Task<List<OrderDto>> GetRoomOrders(int roomId)
+        {
+            return (await _hotelRepository.GetRoomOrders(roomId)).Select(order => new OrderDto
+            {
+                Id = order.Id,
+                AdultsAmount = order.AdultsAmount,
+                ChildrenAmount = order.ChildrenAmount,
+                ArrivalDate = order.ArrivalDate,
+                DepartureDate = order.DepartureDate,
+                OrderStatus = order.OrderStatus,
+                OrderTime = order.OrderTime,
+                RoomId = order.RoomId,
+                TotalPrice = order.TotalPrice,
+                UserId = order.UserId,
+            }).ToList();
         }
 
         public async Task<List<HotelShortDto>?> SearchHotels(HotelSearchRequest request)

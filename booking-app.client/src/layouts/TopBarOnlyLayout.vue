@@ -10,3 +10,9 @@
 <script setup>
 import TopBar from '@/components/TopBarComponent.vue';
 </script>
+
+<style>
+main {
+    margin-top: 60px;
+}
+</style>

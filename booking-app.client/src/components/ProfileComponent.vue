@@ -9,8 +9,7 @@
             <Button label="Выйти из аккаунта" @click="logOut"></Button>
         </div>
 
-        <p>Ваши бронирования:</p>
-        <ScrollPanel>
+        <ScrollPanel v-if="ordersAreVisible">
             <BookingHistoryComponent></BookingHistoryComponent>
         </ScrollPanel>
     </div>
@@ -29,6 +28,7 @@ import { onMounted } from 'vue';
 const router = useRouter();
 const globalVar = inject('globalVar')
 var userData = ref(checkAuth())
+const ordersAreVisible = ref(true)
 
 
 
@@ -63,6 +63,8 @@ async function _checkAuth() {
     }
     else {
         userData.value = auth;
+        if (userData.value.roles.includes("hotelRepresentative"))
+            ordersAreVisible.value = false;
     }
 }
 

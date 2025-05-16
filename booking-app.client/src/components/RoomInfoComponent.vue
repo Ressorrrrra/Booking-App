@@ -23,24 +23,28 @@
 
         <!-- Bookings List -->
         <h3>Ближайшие брони</h3>
-        <RoomBookingsList :bookings="bookings" @cancel-booking="cancelBooking" />
+        <ScrollPanel>
+            <RoomBookingsList :roomId="route.params.roomId" :hotelId="route.params.hotelId"
+                @cancel-booking="cancelBooking" />
+        </ScrollPanel>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import ScrollPanel from 'primevue/scrollpanel';
 import { FloatLabel, Calendar, Button } from 'primevue';
-import RoomBookingsList from './RoomBookingsListComponent.vue'; 
+import RoomBookingsList from './RoomBookingsListComponent.vue';
 
 const route = useRoute();
 const router = useRouter();
 const globalVar = inject('globalVar');
 
-const hotelId = ref(route.params.id);
+const hotelId = ref(route.params.hotelId);
 const roomId = ref(route.params.roomId);
 const room = ref(null);
-const bookings = ref([]);
+const orders = ref([]);
 const closeStartDate = ref(null);
 const closeEndDate = ref(null);
 
@@ -54,43 +58,26 @@ async function fetchRoomDetails() {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
         room.value = await response.json();
-        console.log(room.value)
     } catch (error) {
         console.error('Ошибка при загрузке информации о комнате:', error);
-    }
-}
-
-async function fetchBookings() {
-    try {
-        const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId.value}/Rooms/${roomId.value}/Bookings`, {
-            credentials: 'include'
-        });
-        if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
-        }
-        const data = await response.json();
-        // Filter for upcoming bookings (assuming booking has a startDate)
-        bookings.value = data.filter(booking => new Date(booking.startDate) >= new Date());
-    } catch (error) {
-        console.error('Ошибка при загрузке броней:', error);
-        bookings.value = [];
     }
 }
 
 // Close the room by creating a special booking
 async function closeRoom() {
     try {
-        const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId.value}/Rooms/${roomId.value}/Bookings`, {
+        const request = {
+            startTime: closeStartDate.value,
+            endTime: closeEndDate.value,
+        }
+        console.log(JSON.stringify(request))
+        const response = await fetch(`${globalVar.apiUrl}/Hotels/${hotelId.value}/Rooms/${roomId.value}/CloseRoom`, {
             credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                startDate: closeStartDate.value.toISOString(),
-                endDate: closeEndDate.value.toISOString(),
-                status: 'CLOSED' // Special status to indicate the room is closed
-            })
+            body: JSON.stringify(request)
         });
         if (!response.ok) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
@@ -98,7 +85,7 @@ async function closeRoom() {
         alert('Комната успешно закрыта на указанный период.');
         closeStartDate.value = null;
         closeEndDate.value = null;
-        fetchBookings(); // Refresh the bookings list
+        fetchOrders();
     } catch (error) {
         console.error('Ошибка при закрытии комнаты:', error);
         alert('Не удалось закрыть комнату. Попробуйте снова.');
@@ -116,7 +103,7 @@ async function cancelBooking(bookingId) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
         alert('Бронь успешно отменена.');
-        fetchBookings(); // Refresh the bookings list
+        fetchOrders(); // Refresh the bookings list
     } catch (error) {
         console.error('Ошибка при отмене брони:', error);
         alert('Не удалось отменить бронь. Попробуйте снова.');
@@ -124,9 +111,8 @@ async function cancelBooking(bookingId) {
 }
 
 // Load data on mount
-onMounted(() => {
-    fetchRoomDetails();
-    fetchBookings();
+onMounted(async () => {
+    await fetchRoomDetails();
 });
 </script>
 
@@ -158,11 +144,12 @@ onMounted(() => {
     gap: 15px;
     flex-wrap: wrap;
     margin-bottom: 20px;
-    align-items:  center;
+    align-items: center;
     justify-content: center;
 }
 
-h2, h3 {
+h2,
+h3 {
     color: #333;
     margin-bottom: 10px;
 }

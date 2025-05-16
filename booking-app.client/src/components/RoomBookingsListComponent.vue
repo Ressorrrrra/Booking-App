@@ -1,41 +1,70 @@
 <template>
     <div class="bookingsList">
-        <div v-if="!bookings.length" class="noBookings">
+        <div v-if="!orders.length" class="noBookings">
             Нет предстоящих броней для этого номера.
         </div>
         <div v-else>
-            <div v-for="booking in bookings" :key="booking.id" class="bookingItem">
-                <p><strong>Дата начала:</strong> {{ formatDate(booking.startDate) }}</p>
-                <p><strong>Дата окончания:</strong> {{ formatDate(booking.endDate) }}</p>
-                <Button label="Отменить" severity="danger" @click="cancelBooking(booking.id)" />
+            <div v-for="order in orders" :key="order.id" class="bookingItem">
+                <p><strong>Дата прибытия:</strong> {{ formatDate(order.arrivalDate) }}</p>
+                <p><strong>Дата отбытия:</strong> {{ formatDate(order.departureDate) }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Button } from 'primevue';
-import { defineProps } from 'vue';
+import { defineProps, ref, inject } from 'vue';
+import { onMounted } from 'vue';
+
+const orders = ref([])
+const globalVar = inject('globalVar');
 
 // Props
 const props = defineProps({
-    bookings: {
-        type: Array,
-        default: () => []
-    }
+    roomId: {
+        type: String,
+        default: () => '0'
+    },
+    hotelId: {
+        type: String,
+        default: () => '0'
+    },
 });
 
 async function cancelBooking(id) {
-
 }
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
+function check() {
+    console.log(props)
+}
+
+onMounted(fetchOrders)
+
+function formatDate(isoDate) {
+    let date = new Date(isoDate);
+    let day = date.getDate().toString().padStart(2, '0'); // Добавляем ведущий ноль, если день меньше 10
+    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Добавляем ведущий ноль, если месяц меньше 10
+    let year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+
+async function fetchOrders() {
+    try {
+        console.log(`${globalVar.apiUrl}/Hotels/${props.hotelId}/Rooms/${props.roomId}/GetRoomOrders`)
+        const response = await fetch(`${globalVar.apiUrl}/Hotels/${props.hotelId}/Rooms/${props.roomId}/GetRoomOrders`, {
+            credentials: 'include'
+        });
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+
+        orders.value = data;
+        console.log(orders)
+    } catch (error) {
+        console.error('Ошибка при загрузке броней:', error);
+        orders.value = [];
+    }
 }
 </script>
 

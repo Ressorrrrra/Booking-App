@@ -1,10 +1,5 @@
 {
   "appId": "booking.app.client",
   "appName": "booking-app.client",
-  "webDir": "dist",
-  "server": {
-    "hostname": "localhost",
-    "androidScheme": "http",
-    "cleartext": true
-  }
+  "webDir": "dist"
 }

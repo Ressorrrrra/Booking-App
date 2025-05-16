@@ -174,6 +174,34 @@ namespace Booking_App.Server.Controllers
             else return Ok(hotels);
         }
 
+        [HttpGet("{hotelId}/Rooms/{roomId}/GetRoomOrders")]
+        public async Task<ActionResult<List<OrderDto>>> GetRoomOrders(int hotelId, int roomId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var hotels = await _hotelService.GetRoomOrders(roomId);
+
+            if (hotels == null) return NotFound();
+            else return Ok(hotels);
+        }
+
+        [HttpPost("{hotelId}/Rooms/{roomId}/CloseRoom")]
+        public async Task<ActionResult<List<OrderDto>>> CloseRoom(int hotelId, int roomId, CloseRoomRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _userService.IsAuthenticated(HttpContext.User);
+            if (user == null)
+                return Unauthorized();
+            await _hotelService.CloseRoom(roomId, user.UserId, request.StartTime, request.EndTime);
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
@@ -186,7 +214,6 @@ namespace Booking_App.Server.Controllers
             {
                 return NotFound();
             }
-
         }
 
         [HttpPut("{id}")]
@@ -207,7 +234,8 @@ namespace Booking_App.Server.Controllers
             {
                 return NotFound();
             }
-
         }
+
+
     }
 }

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p style="display: flex; justify-content: center; align-items: center;">Ваши бронирования:</p>
         <div v-if="!orders.length" class="noResults">
             У вас нет бронирований
         </div>

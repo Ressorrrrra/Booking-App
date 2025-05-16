@@ -66,34 +66,34 @@ const routes = [
     path: "/hotelsControlPage",
     component: HotelsControlPageComponent,
     name: "hotelsControlPage",
-    meta: { layout: "empty" }
+    meta: { layout: "navbarOnly" }
   },
   {
     path: "/createHotel/:id?",
     component: CreateHotelComponent,
     name: "createHotel",
-    meta: { layout: "topBarOnly" },
+    meta: { layout: "user" },
     props: true
   },
   {
     path: "/roomControl/:id",
     component: HotelRoomsControl, // Предполагаемый компонент для информации о номере
     name: "roomControl",
-    meta: { layout: "topBarOnly" },
+    meta: { layout: "user" },
     props: true
   },
   {
     path: "/roomControl/:hotelId/createRoom/:roomId?",
-    component: CreateRoomComponent, // Предполагаемый компонент для информации о номере
+    component: CreateRoomComponent,
     name: "createRoom",
-    meta: { layout: "topBarOnly" },
+    meta: { layout: "user" },
     props: true
   },
   {
-    path: "/roomControl/:hotelId/:roomId?",
-    component: RoomInfoComponent, // Предполагаемый компонент для информации о номере
+    path: "/roomControl/:hotelId/:roomId",
+    component: RoomInfoComponent,
     name: "roomInfo",
-    meta: { layout: "topBarOnly" },
+    meta: { layout: "user" },
     props: true
   },
   {

@@ -10,3 +10,9 @@
 <script setup>
 import Navbar from '@/components/NavbarComponent.vue';
 </script>
+
+<style>
+main {
+    margin-bottom: 80px;
+}
+</style>

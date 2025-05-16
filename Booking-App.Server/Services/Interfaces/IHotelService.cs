@@ -13,5 +13,7 @@ namespace Booking_App.Server.Services.Interfaces
         public Task<bool> DeleteHotel(int id);
         public Task<bool> UpdateHotel(CreateHotelRequest hotel, int id);
         public Task CreateHotel(CreateHotelRequest hotel, string creatorId);
+        public Task CloseRoom(int roomId, string UserId, DateTime startDate, DateTime endDate);
+        public Task<List<OrderDto>> GetRoomOrders(int roomId);
     }
 }

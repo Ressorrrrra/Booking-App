@@ -22,7 +22,7 @@
         <div v-if="!rooms.length" class="noResults">
             Не найдено номеровв по вашему запросу.
         </div>
-        <div v-else>
+        <div v-else class="rooms">
             <div v-for="room in rooms" :key="room.id" class="item">
                 <Button class="info" :label="room.number.toString()" rounded severity="secondary"
                     @click="goToRoomInfo(room.id)"></Button>
@@ -48,7 +48,7 @@ const route = useRoute();
 const router = useRouter();
 const globalVar = inject('globalVar');
 
-const hotelId = ref(route.params.id); // ID отеля из маршрута
+const hotelId = route.params.id; // ID отеля из маршрута
 const rooms = ref([]); // Список номеров
 const searchCriteria = ref({
     number: null,
@@ -59,7 +59,7 @@ const searchCriteria = ref({
 // Получение списка номеров с учетом критериев поиска
 async function fetchRooms() {
     try {
-        let url = `${globalVar.apiUrl}/Hotels/${hotelId.value}/SearchRooms`;
+        let url = `${globalVar.apiUrl}/Hotels/${hotelId}/SearchRooms`;
         const params = new URLSearchParams();
 
         const response = await fetch(url, {
@@ -89,6 +89,9 @@ function goToRoomInfo(roomId) {
         console.error('Invalid roomId:', roomId);
         return;
     }
+
+    console.log(hotelId)
+    console.log(roomId)
     router.push({ name: 'roomInfo', params: { hotelId, roomId } });
 }
 
@@ -108,25 +111,31 @@ watch(
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center vertically */
+    justify-content: center;
+    /* Center vertically */
     width: 100%;
     gap: 20px;
-    min-height: 100vh; /* Take full viewport height */
-    background-color: #c0f5f2; /* Match the screenshot background */
+    min-height: 100vh;
+    /* Take full viewport height */
+    background-color: #c0f5f2;
+    /* Match the screenshot background */
 }
 
 .roomsList {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center vertically */
+    justify-content: center;
+    /* Center vertically */
     width: 100%;
-    min-height: 100vh; /* Take full viewport height */
+    min-height: 100vh;
+    /* Take full viewport height */
     padding: 20px;
-    background-color: #c0f5f2; /* Match the screenshot background */
+    background-color: #c0f5f2;
+    /* Match the screenshot background */
 }
 
-.roomsList .header{
+.roomsList .header {
     font-weight: 700;
     font-size: 1.2rem;
 }
@@ -136,11 +145,19 @@ watch(
     gap: 15px;
     flex-wrap: wrap;
     margin-bottom: 30px;
-    justify-content: center; /* Center the search inputs and button */
+    justify-content: center;
+    /* Center the search inputs and button */
+}
+
+.roomsList .rooms {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .roomsList .search-section .p-float-label {
-    min-width: 200px; /* Ensure inputs have a consistent width */
+    min-width: 200px;
+    /* Ensure inputs have a consistent width */
 }
 
 .roomsList .roomsList .noResults {
@@ -163,7 +180,8 @@ watch(
 .roomsList .item .info {
     width: 64px;
     height: 64px;
-    background-color: lightgreen; /* Match the screenshot */
+    background-color: lightgreen;
+    /* Match the screenshot */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -184,7 +202,8 @@ watch(
     }
 
     .search-section .p-float-label {
-        width: 100%; /* Full width on mobile */
+        width: 100%;
+        /* Full width on mobile */
     }
 
     .search-section .p-button {

@@ -1,8 +1,8 @@
 <template>
     <Toolbar class="navbar">
         <template #start>
-            <Button class="button" label="Поиск" @click="goToSearch" icon="pi pi-search" iconPos="top"
-                variant="link"></Button>
+            <Button v-if="searchIsVisible" class="button" label="Поиск" @click="goToSearch" icon="pi pi-search"
+                iconPos="top" variant="link"></Button>
         </template>
 
         <template #center>
@@ -18,11 +18,14 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Toolbar } from 'primevue';
 import Button from 'primevue/button';
-import { useRouter } from 'vue-router';
+import { checkAuth } from '@/plugins/userStatePlugin';
 
-const router = useRouter();
+const searchIsVisible = ref(true);
+const router = useRouter()
 
 function goToMainPage() {
     router.push({ name: 'mainpage' });
@@ -35,6 +38,14 @@ function goToSearch() {
 function goToProfile() {
     router.push({ name: 'profile' });
 }
+
+async function checkUser() {
+    var user = await checkAuth()
+    if (user.roles.includes("hotelRepresentative"))
+        searchIsVisible.value = false;
+}
+
+onMounted(checkUser)
 </script>
 
 <style scoped>

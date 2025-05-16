@@ -5,56 +5,58 @@
                 <InputText name="name" type="text" placeholder="Поиск" fluid icon @keyup.enter="requestSubmit" />
                 <InputIcon class="pi pi-search" @click="requestSubmit"></InputIcon>
             </IconField>
+            <div class="options">
+                <div class="optionsDiv">
+                    <p>Время проживания</p>
 
-            <div class="optionsDiv">
-                <p>Время проживания</p>
+                    <div class="optionsDivInputs">
+                        <div>
+                            <p>Дата прибытия</p>
+                            <DatePicker name="arrivalDate" showIcon fluid iconDisplay="input" />
+                        </div>
 
-                <div class="options">
-                    <div>
-                        <p>Дата прибытия</p>
-                        <DatePicker name="arrivalDate" showIcon fluid iconDisplay="input" />
+                        <div>
+                            <p>Дата отбытия</p>
+                            <DatePicker name="departureDate" showIcon fluid iconDisplay="input" />
+                        </div>
                     </div>
+                </div>
 
-                    <div>
-                        <p>Дата отбытия</p>
-                        <DatePicker name="departureDate" showIcon fluid iconDisplay="input" />
+                <div class="optionsDiv">
+                    <p>Местоположение</p>
+
+                    <div class="optionsDivInputs">
+                        <div>
+                            <p>Страна</p>
+                            <AutoComplete name="country" dropdown />
+                        </div>
+
+                        <div>
+                            <p>Город</p>
+                            <AutoComplete name="city" dropdown />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="optionsDiv">
+                    <p>Цена</p>
+
+                    <div class="optionsDivInputs">
+                        <div>
+                            <p>От</p>
+                            <AutoComplete name="minPrice" dropdown />
+                        </div>
+
+                        <div>
+                            <p>До</p>
+                            <AutoComplete name="maxPrice" dropdown />
+                        </div>
+
+
                     </div>
                 </div>
             </div>
 
-            <div class="optionsDiv">
-                <p>Местоположение</p>
-
-                <div class="options">
-                    <div>
-                        <p>Страна</p>
-                        <AutoComplete name="country" dropdown />
-                    </div>
-
-                    <div>
-                        <p>Город/населённый пункт</p>
-                        <AutoComplete name="city" dropdown />
-                    </div>
-                </div>
-            </div>
-
-            <div class="optionsDiv">
-                <p>Цена</p>
-
-                <div class="options">
-                    <div>
-                        <p>От</p>
-                        <AutoComplete name="minPrice" dropdown />
-                    </div>
-
-                    <div>
-                        <p>До</p>
-                        <AutoComplete name="maxPrice" dropdown />
-                    </div>
-
-
-                </div>
-            </div>
 
         </div>
         <HotelList :criteria="searchRequest" />
@@ -112,7 +114,7 @@ async function onFormSubmit(form) {
 
 </script>
 
-<style>
+<style scoped>
 .form {
     display: flex;
     flex-direction: column;
@@ -120,6 +122,37 @@ async function onFormSubmit(form) {
     justify-content: center;
     /* Добавлены отступы для лучшего восприятия */
 }
+
+.form .div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form .div .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form .div .options .optionsDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form .div .options .optionsDiv .optionsDivInputs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+
 
 /* Медиазапрос для мобильных устройств */
 @media (max-width: 600px) {
@@ -150,7 +183,7 @@ async function onFormSubmit(form) {
     .form .optionsDiv .options {
         grid-column-gap: 50px;
         /* Увеличиваем отступ между опциями для планшетов */
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
         /* Для планшетов расположение опций по 3 в ряд */
     }
 }
@@ -160,33 +193,8 @@ async function onFormSubmit(form) {
     .form .optionsDiv .options {
         grid-column-gap: 50px;
         /* Для десктопов оставляем большие отступы */
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
         /* Для десктопов 4 опции в ряд */
     }
-}
-
-.form .div {
-    display: grid;
-    grid-auto-flow: row;
-    grid-row-gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.form .optionsDiv {
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.form .optionsDiv .options {
-    margin: 10px;
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 50px;
-    align-items: center;
-    justify-content: center;
 }
 </style>
